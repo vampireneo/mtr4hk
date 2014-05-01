@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mtr4hk">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+        <title>MTR4HK</title>
+        <meta name="generator" content="Bootply" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+                <link href="/styles/mtr.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+          <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+    </head>
+    
+    <body  >
+        <!--[if lt IE 8]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+<section style="color:red; text-align:center">This is a work in Progress and All DATA are just mock-up for illustration purpose only</section>
+<header class="navbar navbar-default navbar-static-top" role="banner">
+<link rel="stylesheet" type="text/css" href="http://code4hk.github.io/commons/code4hk-badge.css">
+<span class="code4hk-badge right"><a id="code4hk-badge-link" href="http://code4.hk" target="_blank"> Code for Hong Kong </a></span>
+  <div class="container">
+
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">MTR4HK</a>
+    </div>
+    <nav class="collapse navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="#xrail">高鐵</a>
+        </li>
+        <li>
+          <a href="#">價格</a>
+        </li>
+        <li>
+          <a href="#">港鐵財政</a>
+        </li>
+        <li>
+          <a href="#">港鐵架構</a>
+        </li>
+        <li>
+          <a href="#">API</a>
+        </li>
+        <li>
+          <a href="#">Others</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+      <ng-view class="view-animate"></ng-view>
+        <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+        <script src="lib/angular/angular.js"></script>
+        <script src="lib/angular-route/angular-route.js"></script>
+        <script src="lib/angular-mocks/angular-mocks.js"></script>
+        <script src="lib/angular-animate/angular-animate.js"></script>
+        <script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+<script src="lib/i18next/i18next.js"></script>
+<script src="lib/ng-i18next/dist/ng-i18next.min.js"></script>
+
+        <script type='text/javascript' src="scripts/app.js"></script>
+
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>
+
+    </body>
+</html>

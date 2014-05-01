@@ -1,0 +1,104 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/vincent/.nvm/v0.11.12/bin/node',
+1 verbose cli   '/Users/vincent/.nvm/v0.11.12/bin/npm',
+1 verbose cli   'install' ]
+2 info using npm@1.4.3
+3 info using node@v0.11.12
+4 warn package.json @ No description
+5 warn package.json @ No repository field.
+6 warn package.json @ No README data
+7 verbose readDependencies using package.json deps
+8 verbose install where, deps [ '/Users/vincent/Dropbox/code4hk/mtr',
+8 verbose install   [ 'karma-script-launcher',
+8 verbose install     'karma-chrome-launcher',
+8 verbose install     'karma-firefox-launcher',
+8 verbose install     'karma-html2js-preprocessor',
+8 verbose install     'karma-jasmine',
+8 verbose install     'karma-coffee-preprocessor',
+8 verbose install     'karma-phantomjs-launcher',
+8 verbose install     'karma',
+8 verbose install     'karma-ng-scenario',
+8 verbose install     'gulp',
+8 verbose install     'gulp-util',
+8 verbose install     'gulp-watch',
+8 verbose install     'gulp-uglify',
+8 verbose install     'gulp-less',
+8 verbose install     'gulp-imagemin',
+8 verbose install     'gulp-livereload',
+8 verbose install     'gulp-concat',
+8 verbose install     'tiny-lr',
+8 verbose install     'gulp-bower' ] ]
+9 info preinstall @
+10 verbose readDependencies using package.json deps
+11 verbose already installed skipping karma-script-launcher@~0.1.0 /Users/vincent/Dropbox/code4hk/mtr
+12 verbose already installed skipping karma-chrome-launcher@~0.1.0 /Users/vincent/Dropbox/code4hk/mtr
+13 verbose already installed skipping karma-firefox-launcher@~0.1.0 /Users/vincent/Dropbox/code4hk/mtr
+14 verbose already installed skipping karma-html2js-preprocessor@~0.1.0 /Users/vincent/Dropbox/code4hk/mtr
+15 verbose already installed skipping karma-jasmine@~0.1.3 /Users/vincent/Dropbox/code4hk/mtr
+16 verbose already installed skipping karma-coffee-preprocessor@~0.1.0 /Users/vincent/Dropbox/code4hk/mtr
+17 verbose already installed skipping karma-phantomjs-launcher@~0.1.0 /Users/vincent/Dropbox/code4hk/mtr
+18 verbose already installed skipping karma@~0.10.4 /Users/vincent/Dropbox/code4hk/mtr
+19 verbose already installed skipping karma-ng-scenario@~0.1.0 /Users/vincent/Dropbox/code4hk/mtr
+20 verbose already installed skipping gulp@^3.6.2 /Users/vincent/Dropbox/code4hk/mtr
+21 verbose already installed skipping gulp-util@~2.2.13 /Users/vincent/Dropbox/code4hk/mtr
+22 verbose already installed skipping gulp-watch@~0.5.0 /Users/vincent/Dropbox/code4hk/mtr
+23 verbose already installed skipping gulp-uglify@~0.2.0 /Users/vincent/Dropbox/code4hk/mtr
+24 verbose already installed skipping gulp-less@1.2.* /Users/vincent/Dropbox/code4hk/mtr
+25 verbose already installed skipping gulp-imagemin@~0.1.4 /Users/vincent/Dropbox/code4hk/mtr
+26 verbose already installed skipping gulp-livereload@~0.3.1 /Users/vincent/Dropbox/code4hk/mtr
+27 verbose already installed skipping gulp-concat@2.1.* /Users/vincent/Dropbox/code4hk/mtr
+28 verbose already installed skipping tiny-lr@~0.0.5 /Users/vincent/Dropbox/code4hk/mtr
+29 verbose already installed skipping gulp-bower@0.0.2 /Users/vincent/Dropbox/code4hk/mtr
+30 silly resolved []
+31 info build /Users/vincent/Dropbox/code4hk/mtr
+32 verbose linkStuff [ false, false, false, '/Users/vincent/Dropbox/code4hk' ]
+33 info linkStuff @
+34 verbose linkBins @
+35 verbose linkMans @
+36 verbose rebuildBundles @
+37 verbose rebuildBundles [ '.bin',
+37 verbose rebuildBundles   'gulp',
+37 verbose rebuildBundles   'gulp-bower',
+37 verbose rebuildBundles   'gulp-concat',
+37 verbose rebuildBundles   'gulp-imagemin',
+37 verbose rebuildBundles   'gulp-less',
+37 verbose rebuildBundles   'gulp-livereload',
+37 verbose rebuildBundles   'gulp-uglify',
+37 verbose rebuildBundles   'gulp-util',
+37 verbose rebuildBundles   'gulp-watch',
+37 verbose rebuildBundles   'karma',
+37 verbose rebuildBundles   'karma-chrome-launcher',
+37 verbose rebuildBundles   'karma-coffee-preprocessor',
+37 verbose rebuildBundles   'karma-firefox-launcher',
+37 verbose rebuildBundles   'karma-html2js-preprocessor',
+37 verbose rebuildBundles   'karma-jasmine',
+37 verbose rebuildBundles   'karma-ng-scenario',
+37 verbose rebuildBundles   'karma-phantomjs-launcher',
+37 verbose rebuildBundles   'karma-requirejs',
+37 verbose rebuildBundles   'karma-script-launcher',
+37 verbose rebuildBundles   'tiny-lr' ]
+38 verbose rebuild bundle /Users/vincent/Dropbox/code4hk/mtr/node_modules/karma-requirejs
+39 info build /Users/vincent/Dropbox/code4hk/mtr/node_modules/karma-requirejs
+40 info preinstall karma-requirejs@0.1.0
+41 verbose linkStuff [ false,
+41 verbose linkStuff   false,
+41 verbose linkStuff   false,
+41 verbose linkStuff   '/Users/vincent/Dropbox/code4hk/mtr/node_modules' ]
+42 info linkStuff karma-requirejs@0.1.0
+43 verbose linkBins karma-requirejs@0.1.0
+44 verbose linkMans karma-requirejs@0.1.0
+45 verbose rebuildBundles karma-requirejs@0.1.0
+46 info install karma-requirejs@0.1.0
+47 info postinstall karma-requirejs@0.1.0
+48 info install @
+49 info postinstall @
+50 info prepublish @
+51 error peerinvalid The package karma-requirejs does not satisfy its siblings' peerDependencies requirements!
+51 error peerinvalid Peer karma@0.10.10 wants karma-requirejs@~0.2.0
+52 error System Darwin 13.1.0
+53 error command "/Users/vincent/.nvm/v0.11.12/bin/node" "/Users/vincent/.nvm/v0.11.12/bin/npm" "install"
+54 error cwd /Users/vincent/Dropbox/code4hk/mtr
+55 error node -v v0.11.12
+56 error npm -v 1.4.3
+57 error code EPEERINVALID
+58 verbose exit [ 1, true ]
