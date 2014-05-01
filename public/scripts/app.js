@@ -16,7 +16,27 @@ config(['$routeProvider',
         $routeProvider.when('/xrail', {
             templateUrl: 'templates/xrail.html',
             controller: 'XRailCtrl'
-        });
+        })
+        .when('/finance', {
+            templateUrl: 'templates/finance.html',
+            controller: 'FinanceCtrl'
+        })
+        .when('/price', {
+            templateUrl: 'templates/price.html',
+            controller: 'PriceCtrl'
+        })
+        .when('/stability', {
+            templateUrl: 'templates/stability.html',
+            controller: 'StabilityCtrl'
+        })
+                .when('/org', {
+            templateUrl: 'templates/org.html',
+            controller: 'OrgCtrl'
+        })
+                .when('/api', {
+            templateUrl: 'templates/api.html',
+            controller: 'ApiCtrl'
+        })
         $routeProvider.otherwise({
             redirectTo: '/main'
         });
@@ -52,7 +72,35 @@ angular.module('mtr4hk')
 
     }
 ])
+
 .controller('XRailCtrl',['$scope',
+    function($scope) {
+
+    }
+])
+
+.controller('FinanceCtrl',['$scope',
+    function($scope) {
+
+    }
+])
+.controller('OrgCtrl',['$scope',
+    function($scope) {
+
+    }
+])
+
+.controller('PriceCtrl',['$scope',
+    function($scope) {
+
+    }
+])
+.controller('StabilityCtrl',['$scope',
+    function($scope) {
+
+    }
+])
+.controller('ApiCtrl',['$scope',
     function($scope) {
 
     }
