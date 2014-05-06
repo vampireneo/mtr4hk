@@ -9,9 +9,9 @@
     "currentLoadFactor6": 0.71,
     "currentLoadFactor4": 1,
     "currentLoadFactor6Design": 0.58,
-    "canIncreaseFreq": "可以",
-    "canUpgrade": "有",
-    "l\r": "(2020年當沙\r"
+    "canIncreaseFreq": true,
+    "canUpgrade": true,
+    "upgrade": "2020年當沙中綫南北走廊通車時完成"
 }, {
     "railway": "西鐵綫",
     "designCap": 64000,
@@ -23,9 +23,9 @@
     "currentLoadFactor6": 0.7,
     "currentLoadFactor4": 0.99,
     "currentLoadFactor6Design": 0.54,
-    "canIncreaseFreq": "可以",
-    "canUpgrade": "有",
-    "l\r": "(2018年當沙\r"
+    "canIncreaseFreq": true,
+    "canUpgrade": true,
+    "upgrade": "2020年當沙中綫南北走廊通車時完成"
 }, {
     "railway": "馬鞍山綫",
     "designCap": 32000,
@@ -37,9 +37,9 @@
     "currentLoadFactor6": 0.57,
     "currentLoadFactor4": 0.8,
     "currentLoadFactor6Design": 0.48,
-    "canIncreaseFreq": "可以",
-    "canUpgrade": "有",
-    "l\r": "(2018年當沙\r"
+    "canIncreaseFreq": true,
+    "canUpgrade": true,
+    "upgrade": "2020年當沙中綫南北走廊通車時完成"
 }, {
     "railway": "將軍澳綫",
     "designCap": 85000,
@@ -51,9 +51,9 @@
     "currentLoadFactor6": 0.72,
     "currentLoadFactor4": 1.006,
     "currentLoadFactor6Design": 0.53,
-    "canIncreaseFreq": "可以",
-    "canUpgrade": "有",
-    "l\r": "(2018至2022\r"
+    "canIncreaseFreq": true,
+    "canUpgrade": true,
+    "upgrade": "2018至2022年完成"
 }, {
     "railway": "港島綫",
     "designCap": 85000,
@@ -65,9 +65,9 @@
     "currentLoadFactor6": 0.66,
     "currentLoadFactor4": 0.93,
     "currentLoadFactor6Design": 0.62,
-    "canIncreaseFreq": "不可以",
-    "canUpgrade": "有",
-    "l\r": "(2018至2022\r"
+    "canIncreaseFreq": false,
+    "canUpgrade": true,
+    "upgrade": "2018至2022年完成"
 }, {
     "railway": "觀塘綫",
     "designCap": 85000,
@@ -79,9 +79,9 @@
     "currentLoadFactor6": 0.67,
     "currentLoadFactor4": 0.94,
     "currentLoadFactor6Design": 0.56,
-    "canIncreaseFreq": "不可以",
-    "canUpgrade": "有",
-    "l\r": "(2018至2022\r"
+    "canIncreaseFreq": false,
+    "canUpgrade": true,
+    "upgrade": "2018至2022年完成"
 }, {
     "railway": "荃灣綫",
     "designCap": 85000,
@@ -93,9 +93,9 @@
     "currentLoadFactor6": 0.7,
     "currentLoadFactor4": 0.98,
     "currentLoadFactor6Design": 0.62,
-    "canIncreaseFreq": "不可以",
-    "canUpgrade": "有",
-    "l\r": "(2018至2022\r"
+    "canIncreaseFreq": false,
+    "canUpgrade": true,
+    "upgrade": "2018至2022年完成"
 }, {
     "railway": "迪士尼綫",
     "designCap": 10800,
@@ -107,35 +107,7 @@
     "currentLoadFactor6": 0.25,
     "currentLoadFactor4": 0.35,
     "currentLoadFactor6Design": 0.22,
-    "canIncreaseFreq": "不可以",
-    "canUpgrade": "有",
-    "l\r": "(2018至2022\r"
-}, {
-    "railway": "部分路段共用路軌",
-    "designCap": 45000,
-    "maxCap": 45000,
-    "currentCap": 37500,
-    "d": 0,
-    "e": 0,
-    "currentLoad": 22400,
-    "currentLoadFactor6": 0.6,
-    "currentLoadFactor4": 0.84,
-    "currentLoadFactor6Design": 0.5,
-    "canIncreaseFreq": "可以(註 5 )",
-    "canUpgrade": "",
-    "l\r": "(計劃中)\r"
-}, {
-    "railway": "部分路段共用路軌",
-    "designCap": 6400,
-    "maxCap": 4800,
-    "currentCap": 4800,
-    "d": 1600,
-    "e": "",
-    "currentLoad": 2200,
-    "currentLoadFactor6": 0.46,
-    "currentLoadFactor4": 0.54,
-    "currentLoadFactor6Design": 0.34,
-    "canIncreaseFreq": "不可以(註 5 )",
-    "canUpgrade": "",
-    "l\r": "(計劃中)\r"
+    "canIncreaseFreq": false,
+    "canUpgrade": true,
+    "upgrade": "2018至2022年完成"
 }]

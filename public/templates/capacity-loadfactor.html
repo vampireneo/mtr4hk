@@ -25,8 +25,15 @@
 </progress>
 <span class="pull-right"> 現時乘客量 / 現有可載客量</span>
 <progressbar class="progress-striped active" max="1" value="loadFactor" type="{{loadType}}">{{aRail.currentLoad}} &nbsp;  /  {{loadFactor * 100}}% </progressbar>
+在現有訊號系統下能否增加列車班次  <span class="label" ng-class="{'label-info':aRail.canIncreaseFreq,
+'label-danger': !aRail.canIncreaseFreq}"><span ng-show="aRail.canIncreaseFreq">{{'Can' |t}}</span>
+<span ng-hide="aRail.canIncreaseFreq">{{'Cannot' |t}}</span>
+</span><span style="margin-left:5px">
+提升訊號系統計劃：{{aRail.upgrade}}
+</span>
+</div> 
 </div>
-</div>
+<br />
 </div>
 <section>
 地鐵報告

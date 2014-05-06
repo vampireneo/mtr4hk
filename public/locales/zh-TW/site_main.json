@@ -6,5 +6,8 @@
     
         "Trend":"可加可減機制下港鐵加幅",
         "Delay Records":"延誤記錄",
-        "MTR Service Update":" 港鐵故障消息"
+        "MTR Service Update":" 港鐵故障消息",
+        "Load Factor":"載客量",
+                "Can":"可以",
+                "Cannot":"不可以"
 }
