@@ -1,0 +1,46 @@
+<h3>載客量統計（2013年）</h3>
+<span ng-click="toggleMode('6Mode')" class="btn" ng-class="{'btn-info':mode==='6Mode', 'btn-default':mode!=='6Mode'}">現時載客率 － 每平方米站立六人計算</span>
+
+<span ng-click="toggleMode('4Mode')" class="btn" ng-class="{'btn-info':mode==='4Mode', 'btn-default':mode!=='4Mode'}">現時載客率 － 最繁忙路段每平方米站立四人計算 </span>
+<hr />
+
+<div ng-repeat="aRail in loadfactorData" ng-controller="railCapCtrl">
+
+<div class="railway">
+<span ng-class="railwayClass" class="name label label-default"><i class="fa fa-road"></i>{{aRail.railway}}</span>
+<br />
+<div style="margin-left:15px" >
+<span class="pull-right"> 現有可載客量 / 最高列車班次下的最高可載客量 ／  設計可載客量</span>
+<br />
+<progress max="aRail.designCap">
+<bar value="aRail.currentCap"  type="default">
+<span >{{aRail.currentCap}}</span>
+</bar>
+<bar value="aRail.maxCap - aRail.currentCap" type="warning">
+<span >{{aRail.maxCap}}</span>
+</bar>
+<bar value="aRail.designCap - aRail.maxCap" type="danger">
+<span >{{(aRail.designCap)}}</span>
+</bar>
+</progress>
+<span class="pull-right"> 現時乘客量 / 現有可載客量</span>
+<progressbar class="progress-striped active" max="1" value="loadFactor" type="{{loadType}}">{{aRail.currentLoad}} &nbsp;  /  {{loadFactor * 100}}% </progressbar>
+</div>
+</div>
+</div>
+<section>
+地鐵報告
+(a)
+月台幕門及自動月台閘門令列車在每個車站停留在月台的時間延長了約10秒 ；
+(b)
+東鐵綫部分路軌須由本地列車及跨境列車共用；以及
+(c)
+自2009年西鐵綫伸延至紅磡站，增長了東鐵綫及西鐵綫列車調頭時間。 
+</section>
+<hr />
+<section>
+<h4>資料來源：</h4>
+
+2013年統計數字，立法會鐵路事宜小組委員會文件CB(1)980/13-14(03)
+http://www.legco.gov.hk/yr13-14/chinese/panels/tp/tp_rdp/papers/tp_rdp0228cb1-980-3-c.pdf
+</section>

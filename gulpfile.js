@@ -6,7 +6,7 @@ var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var livereload = require('gulp-livereload');
 var concat = require('gulp-concat');
-var less = require('gulp-less');
+var sass = require('gulp-sass');
 var bower = require('gulp-bower');
 
 server = lr();
@@ -16,26 +16,20 @@ var publicFolder = 'public/';
 gulp.task('bower', function() {
 
     bower()
-        .pipe(gulp.dest(publicFolder+'lib/'));
-
-});
-gulp.task('build', ['bower'], function() {
-    gulp.src('less/*.less')
-        .pipe(less())
-        .pipe(gulp.dest(publicFolder+'css/'));
+        .pipe(gulp.dest(publicFolder + 'lib/'));
 
 });
 
-gulp.task('default', ['bower','listen'], function() {
-    gulp.src(publicFolder+'*')
+gulp.task('default', ['bower', 'listen'], function() {
+    gulp.src(publicFolder + '*')
         .pipe(watch())
         .pipe(livereload(server));
-
-    gulp.src('less/*.less')
-        .pipe(watch())
-        .pipe(less())
-        .pipe(gulp.dest(publicFolder+'css/'))
-        .pipe(livereload(server));
+        
+    // gulp.src('./scss/*.scss')
+    //     .pipe(watch())
+    //     .pipe(sass())
+    //     .pipe(gulp.dest(publicFolder + 'styles/'))
+    //     .pipe(livereload(server));
 });
 
 gulp.task('listen', function(next) {
