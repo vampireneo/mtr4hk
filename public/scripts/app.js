@@ -114,7 +114,7 @@ angular.module('mtr4hk')
     .controller('CapacityCtrl', ['$scope', '$http','$timeout','$location',
         function($scope, $http,$timeout,$location) {
             $scope.initLoadFactorChart = function() {
-                $http.get($location.host()+':8020/loadfactor').then(function(data) {
+                $http.get('http://'+$location.host()+':8020/loadfactor').then(function(data) {
                     $scope.loadfactorData = data.data;
 
                 })
