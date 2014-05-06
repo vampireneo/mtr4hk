@@ -1,21 +1,21 @@
-.view - animate.ng - enter {
-    -webkit - transition: .5s linear all; - moz - transition: .5s linear all; - o - transition: .5s linear all;
+.view-animate.ng-enter {
+    -webkit-transition: .5s linear all; -moz-transition: .5s linear all; -o-transition: .5s linear all;
     transition: .5s linear all;
     opacity: 0
 }
-    .view - animate.ng - enter.ng - enter - active {
+    .view-animate.ng-enter.ng-enter-active {
         opacity: 1
 }
 
 
-.xrail - route {
-    height: 10 % ;
-    width: 50 % ;
+.xrail-route {
+    height: 10% ;
+    width: 50% ;
 }
 
 iframe.timeline {
     display: block;
-    width: 90 % ;
+    width: 90% ;
     height: 450px;
     margin: 0 auto;
 }
