@@ -74,8 +74,6 @@ angular.module('jm.i18next')
                     defaultNs: 'site_main'
                 }
             };
-
-            // http://localhost:8005/?setLng=en/
         }
     ]);
 
@@ -113,10 +111,10 @@ angular.module('mtr4hk')
 
         }
     ])
-    .controller('CapacityCtrl', ['$scope', '$http','$timeout',
-        function($scope, $http,$timeout) {
+    .controller('CapacityCtrl', ['$scope', '$http','$timeout','$location',
+        function($scope, $http,$timeout,$location) {
             $scope.initLoadFactorChart = function() {
-                $http.get('http://localhost:8020/loadfactor').then(function(data) {
+                $http.get($location.host()+':8020/loadfactor').then(function(data) {
                     $scope.loadfactorData = data.data;
 
                 })
