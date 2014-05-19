@@ -9,3 +9,4 @@ logs/*
 app/lib/
 node_modules/
 bower_components/
+public/lib/
