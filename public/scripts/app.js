@@ -7,7 +7,8 @@ angular.module('mtr4hk', [
     'ngAnimate',
     'jm.i18next',
     'ui.bootstrap',
-    'leaflet-directive'
+    'leaflet-directive',
+    'vr.directives.slider'
 ]).
 config(['$routeProvider',
     function($routeProvider) {
@@ -83,9 +84,9 @@ angular.module('jm.i18next')
     ]);
 
 angular.module('mtr4hk')
-.factory('_',function() {
-    return window._;
-})
+    .factory('_', function() {
+        return window._;
+    })
     .controller('MainCtrl', ['$scope',
         function($scope) {
 
@@ -104,8 +105,8 @@ angular.module('mtr4hk')
     }
 ])
 
-.controller('XRailProgressCtrl', ['$scope', '$timeout', '$http','_',
-    function($scope, $timeout, $http,_) {
+.controller('XRailProgressCtrl', ['$scope', '$timeout', '$http', '_',
+    function($scope, $timeout, $http, _) {
         console.log('XRailProgressCtrl');
         // var app = angular.module("demoapp", ['leaflet-directive']);
         //      app.controller("DemoController", [ "$scope", function($scope) {
@@ -123,43 +124,61 @@ angular.module('mtr4hk')
         });
 
 
-        function _determinTimeWindow(time) {
-            var timeWindows = {
-                "1": {
-                    start: 20100101,
-                    end: 20100630
-                },
-                "2": {
-                    start: 20100701,
-                    end: 20101230
-                },
-                "3": {
-                    start: 20110101,
-                    end: 20110630
-                },
-                "4": {
-                    start: 20110701,
-                    end: 20111230
-                },
-                "5": {
-                    start: 20110631,
-                    end: 20120130
-                },
-                "6": {
-                    start: 20110101,
-                    end: 20110630
-                },
-                "7": {
-                    start: 20110101,
-                    end: 20110630
-                },
-                "8": {
-                    start: 20110101,
-                    end: 20110630
-                }
+        var timeWindows = {
+            "0": { //others
+                start: -1,
+                end: -1
+            },
+            "1": {
+                start: 20100101,
+                end: 20100630
+            },
+            "2": {
+                start: 20100701,
+                end: 20101231
+            },
+            "3": {
+                start: 20110101,
+                end: 20110630
+            },
+            "4": {
+                start: 20110701,
+                end: 20111231
+            },
+            "5": {
+                start: 20120101,
+                end: 20120630
+            },
+            "6": {
+                start: 20120701,
+                end: 20121230
+            },
+            "7": {
+                start: 20130101,
+                end: 20130630
+            },
+            "8": {
+                start: 20130701,
+                end: 20111231
             }
+        };
+
+        /**
+         *  Input time is MM/DD/YYYY
+         **/
+        $scope.determineTimeWindow = function(timestamp) {
+
+            _.each(timeWindows, function(timeWindow, key) {
+                timeWindow.key = key;
+                return timeWindow;
+            });
+
+
+
             var windowFound = _.find(timeWindows, function(timeWindow) {
-                return time > timeWindow.start && time < timeWindow.end;
+                var windowStartTs = moment(timeWindow.start, "YYYYMMDD").format("X");
+                var windowEndTs = moment(timeWindow.end, "YYYYMMDD").format("X");
+                return timestamp >= windowStartTs && timestamp < windowEndTs;
             })
             return windowFound;
         }
@@ -170,73 +189,100 @@ angular.module('mtr4hk')
             var events = entries.map(function(entry) {
                 console.log(entry);
 
-            var time = 2000000;
-                var windowFound = _determinTimeWindow(time)
-
+                var time = entry.gsx$datadatemmddyyyy.$t;
+                var timestamp = moment(time, "MM/DD/YYYY").format('X');
+                var windowFound = $scope.determineTimeWindow(timestamp);
 
                 return {
                     contract: entry.gsx$modulecontract.$t,
                     location: entry.gsx$locaiton.$t,
                     lat: entry.gsx$lat.$t,
                     lng: entry.gsx$lng.$t,
-                    time:time,
-                    timeWindow:windowFound
+                    time: time,
+                    timeWindow: windowFound ? windowFound.key : 0
                 }
             })
             console.log(events);
+
+            $scope.events = events;
+
+
+
             return events;
         }).fail(function(err) {
             console.log(err);
         });
+        $scope.value = 1288323623;
 
-        $scope.markerBuckets = {
-            "201306to201312": {
-                nanChang: {
-                    lat: 22.326734,
-                    lng: 114.153599,
-                    message: "I want to travel here!",
-                    focus: true,
-                    draggable: false
-                },
-                terminus: {
-                    lat: 22.304983,
-                    lng: 114.161912,
-                    message: "Terminus",
-                    focus: true,
-                    draggable: false
-                }
-            },
-            "201301to201306": {
-                nanChang: {
-                    lat: 22.336734,
-                    lng: 114.253599,
-                    message: "I want to travel here!",
-                    focus: true,
-                    draggable: false
-                },
-                terminus: {
-                    lat: 22.314983,
-                    lng: 114.261912,
-                    message: "Terminus",
-                    focus: true,
+        $scope.$watch('value', function(newVal) {
+            var timeWindow = $scope.determineTimeWindow(newVal);
+            $scope.chosenTimeWindow = timeWindow ? timeWindow.key : 0;
+        })
+
+        //pre sort into buckets by time window
+
+        $scope.markerBuckets = {};
+        _.each(timeWindows, function(timeWindow, key) {
+            $scope.markerBuckets[key] = {};
+        })
+        $scope.$watch('events', function(newVal) {
+            _.each($scope.events, function(event) {
+                var marker = {
+                    lat: event.lat !=="" ? parseFloat(event.lat) : 0,
+                    lng: event.lng !=="" ? parseFloat(event.lng) : 0,
+                    message: event.location,
+                    focus: false,
                     draggable: false
                 }
-            }
+                //TODO use contract as key
+                $scope.markerBuckets[event.timeWindow][event.location]=marker;
+                console.log($scope.markerBuckets);
+            });
 
-        };
+        });
 
-        $scope.markers2nd = {
+$scope.displayedMarkers = {};
+        $scope.$watch('chosenTimeWindow', function(newTimeWindow) {
+            console.log('update displayed markers to '+newTimeWindow);
+            $scope.displayedMarkers = $scope.markerBuckets[newTimeWindow];
+            console.log($scope.displayedMarkers);
+        });
 
-        }
+        // $scope.markerBuckets = {
+        //     "201306to201312": {
+        //         nanChang: {
+        //             lat: 22.326734,
+        //             lng: 114.153599,
+        //             message: "I want to travel here!",
+        //             focus: true,
+        //             draggable: false
+        //         },
+        //         terminus: {
+        //             lat: 22.304983,
+        //             lng: 114.161912,
+        //             message: "Terminus",
+        //             focus: true,
+        //             draggable: false
+        //         }
+        //     },
+        //     "201301to201306": {
+        //         nanChang: {
+        //             lat: 22.336734,
+        //             lng: 114.253599,
+        //             message: "I want to travel here!",
+        //             focus: true,
+        //             draggable: false
+        //         },
+        //         terminus: {
+        //             lat: 22.314983,
+        //             lng: 114.261912,
+        //             message: "Terminus",
+        //             focus: true,
+        //             draggable: false
+        //         }
+        //     }
 
-
-        $scope.markers = $scope.markers1st;
-
-        $timeout(function() {
-            $scope.markers = $scope.markers2nd;
-        }, 2000)
-
-
+        // };
         $scope.layers = {
             baselayers: {
                 osm: {
