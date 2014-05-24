@@ -3,13 +3,21 @@
             padding: 0;
             margin: 0;
         }
-        html, body, #map {
-            height: 100%;
+        html, body, .map-container {
+            height: 90%;
             width: 100%;
         }
     </style>
 
     <style>
+
+    #map{
+          height:100%;
+          margin-top:-20px;
+    }
+.info-container{
+  width:25%;
+}
 
   slider {
     display:     block;
@@ -85,7 +93,22 @@ margin-left: -100000px;
     display: none;
   }
 
-  #slider-container {
+  .time-slider{
+    width: 100%;
+  }
+
+
+  .time-slider-buckets{
+    background: #eee;
+    height:20px;
+    width:100%;
+    margin-right: 0px;
+    margin-left: 0px;
+    border-color:#eee;
+  }
+
+    .slider-container {
+    padding-top:2rem;
     -webkit-touch-callout: none;
     -webkit-user-select:   none;
     -khtml-user-select:    none;
@@ -94,16 +117,43 @@ margin-left: -100000px;
     user-select:           none;
   }
 
+
+  .date-container{
+  }
+
+  .xrail-progress-container{
+    margin-top:-20px;
+  }
     </style>
+    <!-- controls="controls" -->
+    <div class="row map-container">
+  <leaflet id="map" class="col-md-9" geojson="railWayGeoJSON" markers="displayedMarkers" center="westKowloon" layers="layers" > </leaflet>
+<div class="col-md-2 info-container">Testing</div>
+  </div>
+
+    <div class="general-info">提交報告</div>
+    <div class="row">
+    <div class="slider-container col-md-10">
+    <!-- stretch="1"  -->
+    <slider class="time-slider" floor="1288323623"  step-width="10000000" ceiling="1400599247" ng-model='value' ></slider>
+    <div class="time-slider-buckets row">
+      <div class="col-md-1">2011-01</div>
+      <div class="col-md-1">2011-06</div>
+      <div class="col-md-1">2012-01</div>
+      <div class="col-md-1">20110106</div>
+    </div>
+    </div>
+    <div class="date-container col-md-2">
+    <h2>
+        {{value * 1000| date:'yyyy-MM'}}
+    </h2>
+    </div>
 
 
-<slider floor="1288323623"  ceiling="1400599247" ng-model='value' ></slider>
+    </div>
 
-<hr/>
 
-    <span >{{value * 1000| date:'yyyy-MM-dd'}}</span>
-<span>
-{{value}}
-{{chosenTimeWindow}}
-</span>
-    <leaflet id="map" markers="displayedMarkers" center="westKowloon" layers="layers"> </leaflet>
+    <span >
+
+    </span>
+<span>{{value}} {{chosenTimeWindow}} </span>

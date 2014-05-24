@@ -183,6 +183,20 @@ angular.module('mtr4hk')
             return windowFound;
         }
 
+$scope.railWayGeoJSON={};
+
+$scope.railWayGeoJSON.style=
+  {
+                    // fillColor: getColor($scope.countries[feature.id]),
+                    weight: 8,
+                    opacity: 1,
+                    color: '#f86767',
+                    // dashArray: '3',
+                    fillOpacity: 0.7
+                };
+
+        $scope.railWayGeoJSON.data=
+{"features":[{"geometry":{"coordinates":[114.056533,22.538392],"type":"Point"},"properties":{"description":"https://zh.wikipedia.org/zh-hk/%E7%A6%8F%E7%94%B0%E7%AB%99","id":"marker-hvkxcpyl0","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"福田站"},"type":"Feature"},{"geometry":{"coordinates":[114.07213769999998,22.4282899],"type":"Point"},"properties":{"description":"","id":"marker-hvkxfuuw1","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"石崗"},"type":"Feature"},{"geometry":{"coordinates":[[114.05645370483398,22.537768878943577],[114.0574836730957,22.50510349164863],[114.07190322875977,22.426103847270774],[114.11833763122559,22.37928564733928],[114.12357330322266,22.36484024166245],[114.16434288024902,22.31601638597883],[114.16468620300293,22.30474080695656]],"type":"LineString"},"properties":{"description":"","id":"marker-hvkxhh3h3","stroke":"#f86767","stroke-opacity":1,"stroke-width":8,"title":"Railway"},"type":"Feature"},{"geometry":{"coordinates":[114.16425704956055,22.304026126900116],"type":"Point"},"properties":{"description":"","id":"marker-hvkxptch7","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"西九龍總站"},"type":"Feature"}],"id":"vincentlaucy.ib05kcn9","type":"FeatureCollection"};
 
         promise.then(function(entries) {
             console.log(entries);
@@ -194,10 +208,12 @@ angular.module('mtr4hk')
                 var windowFound = $scope.determineTimeWindow(timestamp);
 
                 return {
+                    id : entry.id.$t,
                     contract: entry.gsx$modulecontract.$t,
-                    location: entry.gsx$locaiton.$t,
+                    location: entry.gsx$location.$t,
                     lat: entry.gsx$lat.$t,
                     lng: entry.gsx$lng.$t,
+                    message: entry.gsx$event.$t,
                     time: time,
                     timeWindow: windowFound ? windowFound.key : 0
                 }
@@ -205,9 +221,6 @@ angular.module('mtr4hk')
             console.log(events);
 
             $scope.events = events;
-
-
-
             return events;
         }).fail(function(err) {
             console.log(err);
@@ -227,62 +240,50 @@ angular.module('mtr4hk')
         })
         $scope.$watch('events', function(newVal) {
             _.each($scope.events, function(event) {
-                var marker = {
-                    lat: event.lat !=="" ? parseFloat(event.lat) : 0,
-                    lng: event.lng !=="" ? parseFloat(event.lng) : 0,
-                    message: event.location,
-                    focus: false,
-                    draggable: false
+
+                var checkIfShowMarker = function(marker) {
+                    if(!marker.lat || !marker.lng){
+                        return false;
+                    }
+                    if(Math.abs(marker.lat) -22 > 10 ||  Math.abs(marker.lng) -114 > 10){
+                        return false;//too far away, sth wrong
+                    }
+                    return true;
+                };
+
+                if (event.location !== 'N/A') {
+                    var marker = {
+                        lat: event.lat !== "" ? parseFloat(event.lat) : 0,
+                        lng: event.lng !== "" ? parseFloat(event.lng) : 0,
+                        message: event.message,
+                        focus: true,
+                        draggable: false
+                    };
+                    //TODO use eng location name as key
+                    var eventKey= event.id.substring(event.id.lastIndexOf('/')+1);
+                    if(checkIfShowMarker(marker)){
+                        $scope.markerBuckets[event.timeWindow][eventKey] = marker;
+                    }
+
+                } else {
+                    //visualize in info bucket
                 }
-                //TODO use contract as key
-                $scope.markerBuckets[event.timeWindow][event.location]=marker;
+
+
                 console.log($scope.markerBuckets);
+
             });
 
         });
 
-$scope.displayedMarkers = {};
+        $scope.displayedMarkers = {};
         $scope.$watch('chosenTimeWindow', function(newTimeWindow) {
-            console.log('update displayed markers to '+newTimeWindow);
+            console.log('update displayed markers to ' + newTimeWindow);
             $scope.displayedMarkers = $scope.markerBuckets[newTimeWindow];
             console.log($scope.displayedMarkers);
         });
 
-        // $scope.markerBuckets = {
-        //     "201306to201312": {
-        //         nanChang: {
-        //             lat: 22.326734,
-        //             lng: 114.153599,
-        //             message: "I want to travel here!",
-        //             focus: true,
-        //             draggable: false
-        //         },
-        //         terminus: {
-        //             lat: 22.304983,
-        //             lng: 114.161912,
-        //             message: "Terminus",
-        //             focus: true,
-        //             draggable: false
-        //         }
-        //     },
-        //     "201301to201306": {
-        //         nanChang: {
-        //             lat: 22.336734,
-        //             lng: 114.253599,
-        //             message: "I want to travel here!",
-        //             focus: true,
-        //             draggable: false
-        //         },
-        //         terminus: {
-        //             lat: 22.314983,
-        //             lng: 114.261912,
-        //             message: "Terminus",
-        //             focus: true,
-        //             draggable: false
-        //         }
-        //     }
 
-        // };
         $scope.layers = {
             baselayers: {
                 osm: {
@@ -297,7 +298,7 @@ $scope.displayedMarkers = {};
                 }
             }
         }
-        //lazy this module?   
+        //lazy this module?
 
 
 
