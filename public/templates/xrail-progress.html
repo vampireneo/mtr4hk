@@ -1,23 +1,110 @@
   <style>
-        body {
-            padding: 0;
-            margin: 0;
-        }
-        html, body, .map-container {
-            height: 90%;
-            width: 100%;
-        }
-    </style>
+  body {
+    padding: 0;
+    margin: 0;
+    overflow:hidden;
+  }
+  html, body{
+    height: 90%;
+    width: 100%;
+  }
+  .map-container {
+    height: 100%;
+    width: 100%;
+  }
+  </style>
 
-    <style>
+  <style>
 
-    #map{
-          height:100%;
-          margin-top:-20px;
-    }
-.info-container{
-  width:25%;
-}
+  .goog-slider-horizontal {
+    height: 18px;
+  }
+  .goog-slider {
+    position: relative;
+    outline: 0;
+  }
+  .goog-slider-horizontal .goog-slider-scale {
+    border-top: 1px solid #ccc;
+    top: 8px;
+    width: 100%;
+  }
+
+  .goog-slider-scale {
+    position: absolute;
+  }
+  .rulerResnum {
+    position: absolute;
+    top: 4px;
+
+    height: 9px;
+    padding: 0;
+    margin: 0;
+    z-index: -1;
+  }
+  .slmarker {
+    border-left: 1px solid #d0d0d0;
+    display: inline-block;
+    height: 9px;
+    position: absolute;
+    width: 38px;
+    z-index: -1;
+  }
+
+  .goog-slider ol, .goog-slider li{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font: inherit inherit 100% inherit;
+    vertical-align: baseline;
+    list-style: none;
+  }
+  .goog-slider li {
+    color: #343434;
+    cursor: default;
+    float: left;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 17px;
+    margin-left: -1px;
+    position: relative;
+    text-align: left;
+    top: 20px;
+    width: 40px;
+
+  }
+  #map{
+    height:100%;
+    margin-top:-20px;
+  }
+  .info-container{
+    width:25%;
+  }
+
+  .charts{
+    position:fixed;
+    top: 10rem;
+    right: 0;
+    background-color: white;
+    height: 15rem;
+    box-shadow: 0.6rem 0.6rem 3px rgba(0,0,0,.25);
+    margin-right: 1rem;
+
+  }
+
+  .general-info{
+    position:fixed;
+    top: 30rem;
+    right: 0;
+    background-color: white;
+    height: 25rem;
+    box-shadow: 0.6rem 0.6rem 3px rgba(0,0,0,.25);
+    margin-right: 1rem;
+
+    overflow-y: scroll;
+
+  }
+
 
   slider {
     display:     block;
@@ -86,7 +173,7 @@
   }
 
   slider span.bubble.low, slider span.bubble.high {
-margin-left: -100000px;
+    margin-left: -100000px;
   }
 
   ::-ms-tooltip {
@@ -99,16 +186,34 @@ margin-left: -100000px;
 
 
   .time-slider-buckets{
-    background: #eee;
+    padding-right: 0px;
+    padding-left: 0px;
+
     height:20px;
     width:100%;
     margin-right: 0px;
     margin-left: 0px;
-    border-color:#eee;
+    /*border-color:#eee;*/
+
+
   }
 
-    .slider-container {
-    padding-top:2rem;
+  .time-slider-buckets .bucket{
+    background: #eee;
+    border-width:1px;
+    border-color:gray;
+    border-style:dashed;
+
+    padding-left:0px;
+    padding-right:0px;
+
+    width:12.5%;
+    display:inline-block;
+
+  }
+
+  .slider-container {
+    /*padding-top:2rem;*/
     -webkit-touch-callout: none;
     -webkit-user-select:   none;
     -khtml-user-select:    none;
@@ -118,42 +223,67 @@ margin-left: -100000px;
   }
 
 
-  .date-container{
+  .date-container h2{
+    margin-top:0;
   }
 
   .xrail-progress-container{
     margin-top:-20px;
   }
-    </style>
-    <!-- controls="controls" -->
-    <div class="row map-container">
-  <leaflet id="map" class="col-md-9" geojson="railWayGeoJSON" markers="displayedMarkers" center="westKowloon" layers="layers" > </leaflet>
-<div class="col-md-2 info-container">Testing</div>
+  </style>
+
+
+
+<link rel="stylesheet" type="text/css" href="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
+  <!-- controls="controls" -->
+  <div class="map-container">
+    <!--  -->
+    <leaflet class="col-xs-12 col-md-12" id="map" geojson="railWayGeoJSON" markers="displayedMarkers" center="westKowloon" layers="layers" > </leaflet>
+    <!-- <div class="col-md-2 info-container">Testing</div> -->
   </div>
 
-    <div class="general-info">提交報告</div>
-    <div class="row">
-    <div class="slider-container col-md-10">
-    <!-- stretch="1"  -->
-    <slider class="time-slider" floor="1288323623"  step-width="10000000" ceiling="1400599247" ng-model='value' ></slider>
-    <div class="time-slider-buckets row">
-      <div class="col-md-1">2011-01</div>
-      <div class="col-md-1">2011-06</div>
-      <div class="col-md-1">2012-01</div>
-      <div class="col-md-1">20110106</div>
-    </div>
-    </div>
-    <div class="date-container col-md-2">
-    <h2>
-        {{value * 1000| date:'yyyy-MM'}}
-    </h2>
-    </div>
+  <div class="col-xs-5 col-md-4 general-info">
+  <h5><b>工程總進度</b></h5>
+  <div ng-repeat="overallEvent in displayedOverall">
+<!--   <span ng-show="overallEvent.contract!= 'Overall' ">{{overallEvent.contract}}</span><span ng-show="overallEvent.contractName">{{overallEvent.contractName}}</span>  -->
+
+  <h6><span class="pull-right">{{overallEvent.time}}</span></h6>
+  <div>{{overallEvent.message}}</div>
+  <span ng-bind-html="overallEvent.sourceTag"></span>
+  </div>
+  </div>
+  <div class="col-xs-5 col-md-4 charts"><h5><b>工程進度及支出表(TODO)</b></h5></div>
+  <div class="row">
+    <div class="slider-container col-xs-10">
+      <!-- stretch="1"  -->
+      <slider class="time-slider" floor="1262275200"  step-width="1000000" ceiling="1400599247" ng-model='value' ></slider>
+</div>
+<div  class="date-container col-md-2">
+  <h2>
+    {{value * 1000| date:'yyyy-MM'}}
+  </h2>
+</div>
+      <div>
+        <!-- <div class="goog-slider goog-slider-horizontal" id="result_slider"  role="slider" aria-valuemin="0" aria-valuemax="90" aria-valuenow="0" tabindex="0" aria-disabled="true"><div class="goog-slider-scale"></div><div class="goog-slider-thumb" style="left: 0px;"></div> -->
+        <!-- <div class="rulerResnum" id="slruler">
+          <div class="slmarker" style="left:0">
+          </div><div class="slmarker" style="left:39px"></div><div class="slmarker" style="left:79px"></div><div class="slmarker" style="left:119px"></div><div class="slmarker" style="left:159px"></div>
+          <div class="slmarker" style="left:359px"></div></div><div style="clear:both"></div>
+
+          <ol>
+            <li>2010-06</li><li>2010-07</li><li>30</li><li>40</li><li style="width:188px">50</li><li style="width:6px">100</li>
+          </ol><div style="clear:both"></div><div style="position:absolute;height:30px;width:100%;top:36px">
+            <div class="sllabel slfast">Faster</div><div class="sllabel slslow">Slower</div></div>
+            <div style="clear:both"></div></div>
+
+          </div> -->
 
 
-    </div>
+
+        </div>
 
 
-    <span >
+        <span >
 
-    </span>
-<span>{{value}} {{chosenTimeWindow}} </span>
+        </span>
+        <!-- <span>{{value}} {{chosenTimeWindow}} </span> -->

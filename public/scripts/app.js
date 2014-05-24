@@ -1,12 +1,11 @@
 'use strict';
-
-
 // Declare app level module which depends on filters, and services
 angular.module('mtr4hk', [
     'ngRoute',
     'ngAnimate',
     'jm.i18next',
     'ui.bootstrap',
+    'ui.bootstrap.tooltip',
     'leaflet-directive',
     'vr.directives.slider'
 ]).
@@ -105,8 +104,8 @@ angular.module('mtr4hk')
     }
 ])
 
-.controller('XRailProgressCtrl', ['$scope', '$timeout', '$http', '_',
-    function($scope, $timeout, $http, _) {
+.controller('XRailProgressCtrl', ['$scope', '$timeout', '$http', '_','$interpolate','$sce',
+    function($scope, $timeout, $http, _,$interpolate,$sce) {
         console.log('XRailProgressCtrl');
         // var app = angular.module("demoapp", ['leaflet-directive']);
         //      app.controller("DemoController", [ "$scope", function($scope) {
@@ -178,7 +177,7 @@ angular.module('mtr4hk')
             var windowFound = _.find(timeWindows, function(timeWindow) {
                 var windowStartTs = moment(timeWindow.start, "YYYYMMDD").format("X");
                 var windowEndTs = moment(timeWindow.end, "YYYYMMDD").format("X");
-                return timestamp >= windowStartTs && timestamp < windowEndTs;
+                return timestamp >= windowStartTs && timestamp <= windowEndTs;
             })
             return windowFound;
         }
@@ -196,7 +195,12 @@ $scope.railWayGeoJSON.style=
                 };
 
         $scope.railWayGeoJSON.data=
-{"features":[{"geometry":{"coordinates":[114.056533,22.538392],"type":"Point"},"properties":{"description":"https://zh.wikipedia.org/zh-hk/%E7%A6%8F%E7%94%B0%E7%AB%99","id":"marker-hvkxcpyl0","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"福田站"},"type":"Feature"},{"geometry":{"coordinates":[114.07213769999998,22.4282899],"type":"Point"},"properties":{"description":"","id":"marker-hvkxfuuw1","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"石崗"},"type":"Feature"},{"geometry":{"coordinates":[[114.05645370483398,22.537768878943577],[114.0574836730957,22.50510349164863],[114.07190322875977,22.426103847270774],[114.11833763122559,22.37928564733928],[114.12357330322266,22.36484024166245],[114.16434288024902,22.31601638597883],[114.16468620300293,22.30474080695656]],"type":"LineString"},"properties":{"description":"","id":"marker-hvkxhh3h3","stroke":"#f86767","stroke-opacity":1,"stroke-width":8,"title":"Railway"},"type":"Feature"},{"geometry":{"coordinates":[114.16425704956055,22.304026126900116],"type":"Point"},"properties":{"description":"","id":"marker-hvkxptch7","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"西九龍總站"},"type":"Feature"}],"id":"vincentlaucy.ib05kcn9","type":"FeatureCollection"};
+{"features":[
+// {"geometry":{"coordinates":[114.056533,22.538392],"type":"Point"},"properties":{"description":"https://zh.wikipedia.org/zh-hk/%E7%A6%8F%E7%94%B0%E7%AB%99","id":"marker-hvkxcpyl0","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"福田站"},"type":"Feature"}
+// ,{"geometry":{"coordinates":[114.07213769999998,22.4282899],"type":"Point"},"properties":{"description":"","id":"marker-hvkxfuuw1","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"石崗"},"type":"Feature"},
+{"geometry":{"coordinates":[[114.05645370483398,22.537768878943577],[114.0574836730957,22.50510349164863],[114.07190322875977,22.426103847270774],[114.11833763122559,22.37928564733928],[114.12357330322266,22.36484024166245],[114.16434288024902,22.31601638597883],[114.16468620300293,22.30474080695656]],"type":"LineString"},"properties":{"description":"","id":"marker-hvkxhh3h3","stroke":"#f86767","stroke-opacity":1,"stroke-width":8,"title":"Railway"},"type":"Feature"}
+// {"geometry":{"coordinates":[114.16425704956055,22.304026126900116],"type":"Point"},"properties":{"description":"","id":"marker-hvkxptch7","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"西九龍總站"},"type":"Feature"}
+],"id":"vincentlaucy.ib05kcn9","type":"FeatureCollection"};
 
         promise.then(function(entries) {
             console.log(entries);
@@ -207,15 +211,27 @@ $scope.railWayGeoJSON.style=
                 var timestamp = moment(time, "MM/DD/YYYY").format('X');
                 var windowFound = $scope.determineTimeWindow(timestamp);
 
+                var contract = null;
+                if(entry.gsx$modulecontract.$t!=='#N/A'){
+                    contract=entry.gsx$modulecontract.$t;
+                }
+                var contractName = null;
+                if(entry.gsx$modulename.$t!=='#N/A'){
+                    contractName=entry.gsx$modulename.$t;
+                }
+             
                 return {
                     id : entry.id.$t,
-                    contract: entry.gsx$modulecontract.$t,
+                    contract: contract,
+                    contractName:contractName,
                     location: entry.gsx$location.$t,
                     lat: entry.gsx$lat.$t,
                     lng: entry.gsx$lng.$t,
                     message: entry.gsx$event.$t,
                     time: time,
-                    timeWindow: windowFound ? windowFound.key : 0
+                    timeWindow: windowFound ? windowFound.key : 0,
+                    source:entry.gsx$source.$t,
+                    sourceLink:entry.gsx$sourcelink.$t
                 }
             })
             console.log(events);
@@ -235,10 +251,33 @@ $scope.railWayGeoJSON.style=
         //pre sort into buckets by time window
 
         $scope.markerBuckets = {};
+        $scope.overallEventBuckets={};
         _.each(timeWindows, function(timeWindow, key) {
             $scope.markerBuckets[key] = {};
-        })
+            $scope.overallEventBuckets[key]=[];
+        }) 
         $scope.$watch('events', function(newVal) {
+
+          var sourceTagWithLinkTemplate= '<small><a href="{{sourceLink}}">source:{{source}}</a></small>';
+          var sourceTagTemplate= '<small>資料：{{source}}</small>';
+          var markerMessageTemplate = '<h6><b>{{contract}} {{contractName}}</b><span class="pull-right">{{date}}</span></h6><div>{{message}} <span ng-bind-html="sourceTag"></span></div>';
+
+          function _getMessage(event){
+            var sourceTag = $sce.trustAsHtml(_getSource(event));
+            return $interpolate(markerMessageTemplate)({date:event.time,contract:event.contract,contractName:event.contractName,message:event.message,sourceTag:sourceTag});
+          }
+          function _getSource(event){
+            var sourceTag= '';
+            if(event.source){
+                if(event.sourceLink){
+                      sourceTag =$interpolate(sourceTagWithLinkTemplate)({source:event.source,sourceLink:event.sourceLink});
+                }else{
+                      sourceTag =$interpolate(sourceTagTemplate)({source:event.source,sourceLink:event.sourceLink});
+                }
+            }
+            return sourceTag;
+          }
+
             _.each($scope.events, function(event) {
 
                 var checkIfShowMarker = function(marker) {
@@ -251,13 +290,21 @@ $scope.railWayGeoJSON.style=
                     return true;
                 };
 
-                if (event.location !== 'N/A') {
+                if (event.location !== '#N/A' && event.location !== '' && event.message !== '') {
                     var marker = {
                         lat: event.lat !== "" ? parseFloat(event.lat) : 0,
                         lng: event.lng !== "" ? parseFloat(event.lng) : 0,
-                        message: event.message,
+                        message:_getMessage(event),
                         focus: true,
                         draggable: false
+                        ,
+                        // fa-road,legal,gear
+                        icon:{
+                            type: 'awesomeMarker',
+                            icon: 'road',
+                            prefix :'fa',
+                            markerColor: 'red'
+                        }
                     };
                     //TODO use eng location name as key
                     var eventKey= event.id.substring(event.id.lastIndexOf('/')+1);
@@ -266,6 +313,12 @@ $scope.railWayGeoJSON.style=
                     }
 
                 } else {
+                    if(event.contract && event.message !==''){
+                        event.sourceTag = $sce.trustAsHtml(_getSource(event));
+                    console.log('missed event');
+                    console.log(event);
+                        $scope.overallEventBuckets[event.timeWindow].push(event) ;
+                    }
                     //visualize in info bucket
                 }
 
@@ -280,6 +333,8 @@ $scope.railWayGeoJSON.style=
         $scope.$watch('chosenTimeWindow', function(newTimeWindow) {
             console.log('update displayed markers to ' + newTimeWindow);
             $scope.displayedMarkers = $scope.markerBuckets[newTimeWindow];
+            $scope.displayedOverall=$scope.overallEventBuckets[newTimeWindow];
+
             console.log($scope.displayedMarkers);
         });
 
