@@ -158,7 +158,11 @@ angular.module('mtr4hk')
             },
             "8": {
                 start: 20130701,
-                end: 20111231
+                end: 20131231
+            },
+            "9": {
+                start: 20140101,
+                end: 20140701
             }
         };
 
@@ -231,7 +235,8 @@ $scope.railWayGeoJSON.style=
                     time: time,
                     timeWindow: windowFound ? windowFound.key : 0,
                     source:entry.gsx$source.$t,
-                    sourceLink:entry.gsx$sourcelink.$t
+                    sourceLink:entry.gsx$sourcelink.$t,
+                    isDelay:entry.gsx$delay.$t === 'Y'
                 }
             })
             console.log(events);
@@ -258,9 +263,9 @@ $scope.railWayGeoJSON.style=
         }) 
         $scope.$watch('events', function(newVal) {
 
-          var sourceTagWithLinkTemplate= '<small><a href="{{sourceLink}}">source:{{source}}</a></small>';
+          var sourceTagWithLinkTemplate= '<small><a target="_blank" href="{{sourceLink}}">資料：{{source}}</a></small>';
           var sourceTagTemplate= '<small>資料：{{source}}</small>';
-          var markerMessageTemplate = '<h6><b>{{contract}} {{contractName}}</b><span class="pull-right">{{date}}</span></h6><div>{{message}} <span ng-bind-html="sourceTag"></span></div>';
+          var markerMessageTemplate = '<h6><b>{{contract}} {{contractName}}</b><span class="pull-right">{{date}}</span></h6><div>{{message}} <div> {{sourceTag}}</div></div>';
 
           function _getMessage(event){
             var sourceTag = $sce.trustAsHtml(_getSource(event));
@@ -272,7 +277,7 @@ $scope.railWayGeoJSON.style=
                 if(event.sourceLink){
                       sourceTag =$interpolate(sourceTagWithLinkTemplate)({source:event.source,sourceLink:event.sourceLink});
                 }else{
-                      sourceTag =$interpolate(sourceTagTemplate)({source:event.source,sourceLink:event.sourceLink});
+                      sourceTag =$interpolate(sourceTagTemplate)({source:event.source});
                 }
             }
             return sourceTag;
@@ -291,6 +296,8 @@ $scope.railWayGeoJSON.style=
                 };
 
                 if (event.location !== '#N/A' && event.location !== '' && event.message !== '') {
+
+
                     var marker = {
                         lat: event.lat !== "" ? parseFloat(event.lat) : 0,
                         lng: event.lng !== "" ? parseFloat(event.lng) : 0,
@@ -303,7 +310,7 @@ $scope.railWayGeoJSON.style=
                             type: 'awesomeMarker',
                             icon: 'road',
                             prefix :'fa',
-                            markerColor: 'red'
+                            markerColor: event.isDelay? 'red':'darkblue'
                         }
                     };
                     //TODO use eng location name as key
