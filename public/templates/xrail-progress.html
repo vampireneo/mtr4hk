@@ -93,7 +93,7 @@
     top: 10rem;
     right: 0;
     background-color: white;
-    height: 15rem;
+    height: 25rem;
     box-shadow: 0.6rem 0.6rem 3px rgba(0,0,0,.25);
     margin-right: 1rem;
 
@@ -101,7 +101,7 @@
 
   .general-info{
     position:fixed;
-    top: 30rem;
+    top: 38rem;
     right: 0;
     background-color: white;
     height: 25rem;
@@ -237,6 +237,11 @@
   .xrail-progress-container{
     margin-top:-20px;
   }
+
+
+  .nvtooltip.xy-tooltip{
+    margin-left:-10rem;
+  }
   </style>
 
 
@@ -259,7 +264,59 @@
   <span ng-bind-html="overallEvent.sourceTag"></span>
   </div>
   </div>
-  <div class="col-xs-5 col-md-4 charts"><h5><b>工程進度及支出表(TODO)</b></h5></div>
+  <div class="col-xs-5 col-md-4 charts">
+  <h5><b>工程進度及支出表</b></h5>
+
+<div>
+  
+<nvd3-bullet-chart
+      data="expenseChartData"
+        id="expenseChartData"
+        margin="{left:75,top:5,bottom:35,right:10}"
+        width="450"
+        height="60"
+        interactive="true"
+        tooltips="true"
+        tooltipcontent="expenseDataTooltipContentFx()"
+        >
+          <svg></svg>
+    </nvd3-bullet-chart>
+</div>
+<div>
+  
+<nvd3-bullet-chart
+      data="emergencyData"
+        id="emergencyData"
+        margin="{left:75,top:5,bottom:35,right:10}"
+        width="450"
+        height="60"
+        interactive="true"
+               tooltips="true"
+        tooltipcontent="emergencyDataTooltipContentFx()"
+        >
+          <svg></svg>
+    </nvd3-bullet-chart>
+
+</div>
+<div>
+  
+<nvd3-bullet-chart
+      data="claimData"
+        id="exampleId"
+        margin="{left:75,top:5,bottom:35,right:10}"
+        width="450"
+        height="60"
+        interactive="true"
+               tooltips="true"
+                tooltipcontent="claimDataTooltipContentFx()"
+        >
+          <svg></svg>
+    </nvd3-bullet-chart>
+
+    已解決申索發放率:50%
+</div>
+
+  </div>
     <div class="col-xs-5 col-md-4 title"><h3><b>高鐵工程進度時間表</b></h3></div>
   <div class="row">
     <div class="slider-container col-xs-10">

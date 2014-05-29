@@ -7,7 +7,8 @@ angular.module('mtr4hk', [
     'ui.bootstrap',
     'ui.bootstrap.tooltip',
     'leaflet-directive',
-    'vr.directives.slider'
+    'vr.directives.slider',
+    'nvd3ChartDirectives'
 ]).
 config(['$routeProvider',
     function($routeProvider) {
@@ -104,8 +105,8 @@ angular.module('mtr4hk')
     }
 ])
 
-.controller('XRailProgressCtrl', ['$scope', '$timeout', '$http', '_','$interpolate','$sce',
-    function($scope, $timeout, $http, _,$interpolate,$sce) {
+.controller('XRailProgressCtrl', ['$scope', '$timeout', '$http', '_', '$interpolate', '$sce',
+    function($scope, $timeout, $http, _, $interpolate, $sce) {
         console.log('XRailProgressCtrl');
         // var app = angular.module("demoapp", ['leaflet-directive']);
         //      app.controller("DemoController", [ "$scope", function($scope) {
@@ -150,7 +151,7 @@ angular.module('mtr4hk')
             },
             "6": {
                 start: 20120701,
-                end: 20121230
+                end: 20121231
             },
             "7": {
                 start: 20130101,
@@ -186,25 +187,49 @@ angular.module('mtr4hk')
             return windowFound;
         }
 
-$scope.railWayGeoJSON={};
+        $scope.railWayGeoJSON = {};
 
-$scope.railWayGeoJSON.style=
-  {
-                    // fillColor: getColor($scope.countries[feature.id]),
-                    weight: 8,
-                    opacity: 1,
-                    color: '#f86767',
-                    // dashArray: '3',
-                    fillOpacity: 0.7
-                };
+        $scope.railWayGeoJSON.style = {
+            // fillColor: getColor($scope.countries[feature.id]),
+            weight: 8,
+            opacity: 1,
+            color: '#f86767',
+            // dashArray: '3',
+            fillOpacity: 0.7
+        };
 
-        $scope.railWayGeoJSON.data=
-{"features":[
-// {"geometry":{"coordinates":[114.056533,22.538392],"type":"Point"},"properties":{"description":"https://zh.wikipedia.org/zh-hk/%E7%A6%8F%E7%94%B0%E7%AB%99","id":"marker-hvkxcpyl0","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"福田站"},"type":"Feature"}
-// ,{"geometry":{"coordinates":[114.07213769999998,22.4282899],"type":"Point"},"properties":{"description":"","id":"marker-hvkxfuuw1","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"石崗"},"type":"Feature"},
-{"geometry":{"coordinates":[[114.05645370483398,22.537768878943577],[114.0574836730957,22.50510349164863],[114.07190322875977,22.426103847270774],[114.11833763122559,22.37928564733928],[114.12357330322266,22.36484024166245],[114.16434288024902,22.31601638597883],[114.16468620300293,22.30474080695656]],"type":"LineString"},"properties":{"description":"","id":"marker-hvkxhh3h3","stroke":"#f86767","stroke-opacity":1,"stroke-width":8,"title":"Railway"},"type":"Feature"}
-// {"geometry":{"coordinates":[114.16425704956055,22.304026126900116],"type":"Point"},"properties":{"description":"","id":"marker-hvkxptch7","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"西九龍總站"},"type":"Feature"}
-],"id":"vincentlaucy.ib05kcn9","type":"FeatureCollection"};
+        $scope.railWayGeoJSON.data = {
+            "features": [
+                // {"geometry":{"coordinates":[114.056533,22.538392],"type":"Point"},"properties":{"description":"https://zh.wikipedia.org/zh-hk/%E7%A6%8F%E7%94%B0%E7%AB%99","id":"marker-hvkxcpyl0","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"福田站"},"type":"Feature"}
+                // ,{"geometry":{"coordinates":[114.07213769999998,22.4282899],"type":"Point"},"properties":{"description":"","id":"marker-hvkxfuuw1","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"石崗"},"type":"Feature"},
+                {
+                    "geometry": {
+                        "coordinates": [
+                            [114.05645370483398, 22.537768878943577],
+                            [114.0574836730957, 22.50510349164863],
+                            [114.07190322875977, 22.426103847270774],
+                            [114.11833763122559, 22.37928564733928],
+                            [114.12357330322266, 22.36484024166245],
+                            [114.16434288024902, 22.31601638597883],
+                            [114.16468620300293, 22.30474080695656]
+                        ],
+                        "type": "LineString"
+                    },
+                    "properties": {
+                        "description": "",
+                        "id": "marker-hvkxhh3h3",
+                        "stroke": "#f86767",
+                        "stroke-opacity": 1,
+                        "stroke-width": 8,
+                        "title": "Railway"
+                    },
+                    "type": "Feature"
+                }
+                // {"geometry":{"coordinates":[114.16425704956055,22.304026126900116],"type":"Point"},"properties":{"description":"","id":"marker-hvkxptch7","marker-color":"#1087bf","marker-size":"medium","marker-symbol":"","title":"西九龍總站"},"type":"Feature"}
+            ],
+            "id": "vincentlaucy.ib05kcn9",
+            "type": "FeatureCollection"
+        };
 
         promise.then(function(entries) {
             console.log(entries);
@@ -216,27 +241,27 @@ $scope.railWayGeoJSON.style=
                 var windowFound = $scope.determineTimeWindow(timestamp);
 
                 var contract = null;
-                if(entry.gsx$modulecontract.$t!=='#N/A'){
-                    contract=entry.gsx$modulecontract.$t;
+                if (entry.gsx$modulecontract.$t !== '#N/A') {
+                    contract = entry.gsx$modulecontract.$t;
                 }
                 var contractName = null;
-                if(entry.gsx$modulename.$t!=='#N/A'){
-                    contractName=entry.gsx$modulename.$t;
+                if (entry.gsx$modulename.$t !== '#N/A') {
+                    contractName = entry.gsx$modulename.$t;
                 }
-             
+
                 return {
-                    id : entry.id.$t,
+                    id: entry.id.$t,
                     contract: contract,
-                    contractName:contractName,
+                    contractName: contractName,
                     location: entry.gsx$location.$t,
                     lat: entry.gsx$lat.$t,
                     lng: entry.gsx$lng.$t,
                     message: entry.gsx$event.$t,
                     time: time,
                     timeWindow: windowFound ? windowFound.key : 0,
-                    source:entry.gsx$source.$t,
-                    sourceLink:entry.gsx$sourcelink.$t,
-                    isDelay:entry.gsx$delay.$t === 'Y'
+                    source: entry.gsx$source.$t,
+                    sourceLink: entry.gsx$sourcelink.$t,
+                    isDelay: entry.gsx$delay.$t === 'Y'
                 }
             })
             console.log(events);
@@ -256,41 +281,53 @@ $scope.railWayGeoJSON.style=
         //pre sort into buckets by time window
 
         $scope.markerBuckets = {};
-        $scope.overallEventBuckets={};
+        $scope.overallEventBuckets = {};
         _.each(timeWindows, function(timeWindow, key) {
             $scope.markerBuckets[key] = {};
-            $scope.overallEventBuckets[key]=[];
-        }) 
+            $scope.overallEventBuckets[key] = [];
+        })
         $scope.$watch('events', function(newVal) {
 
-          var sourceTagWithLinkTemplate= '<small><a target="_blank" href="{{sourceLink}}">資料：{{source}}</a></small>';
-          var sourceTagTemplate= '<small>資料：{{source}}</small>';
-          var markerMessageTemplate = '<h6><b>{{contract}} {{contractName}}</b><span class="pull-right">{{date}}</span></h6><div>{{message}} <div> {{sourceTag}}</div></div>';
+            var sourceTagWithLinkTemplate = '<small><a target="_blank" href="{{sourceLink}}">資料：{{source}}</a></small>';
+            var sourceTagTemplate = '<small>資料：{{source}}</small>';
+            var markerMessageTemplate = '<h6><b>{{contract}} {{contractName}}</b><span class="pull-right">{{date}}</span></h6><div>{{message}} <div> {{sourceTag}}</div></div>';
 
-          function _getMessage(event){
-            var sourceTag = $sce.trustAsHtml(_getSource(event));
-            return $interpolate(markerMessageTemplate)({date:event.time,contract:event.contract,contractName:event.contractName,message:event.message,sourceTag:sourceTag});
-          }
-          function _getSource(event){
-            var sourceTag= '';
-            if(event.source){
-                if(event.sourceLink){
-                      sourceTag =$interpolate(sourceTagWithLinkTemplate)({source:event.source,sourceLink:event.sourceLink});
-                }else{
-                      sourceTag =$interpolate(sourceTagTemplate)({source:event.source});
-                }
+            function _getMessage(event) {
+                var sourceTag = $sce.trustAsHtml(_getSource(event));
+                return $interpolate(markerMessageTemplate)({
+                    date: event.time,
+                    contract: event.contract,
+                    contractName: event.contractName,
+                    message: event.message,
+                    sourceTag: sourceTag
+                });
             }
-            return sourceTag;
-          }
+
+            function _getSource(event) {
+                var sourceTag = '';
+                if (event.source) {
+                    if (event.sourceLink) {
+                        sourceTag = $interpolate(sourceTagWithLinkTemplate)({
+                            source: event.source,
+                            sourceLink: event.sourceLink
+                        });
+                    } else {
+                        sourceTag = $interpolate(sourceTagTemplate)({
+                            source: event.source
+                        });
+                    }
+                }
+                return sourceTag;
+            }
 
             _.each($scope.events, function(event) {
 
                 var checkIfShowMarker = function(marker) {
-                    if(!marker.lat || !marker.lng){
+                    if (!marker.lat || !marker.lng) {
                         return false;
                     }
-                    if(Math.abs(marker.lat) -22 > 10 ||  Math.abs(marker.lng) -114 > 10){
-                        return false;//too far away, sth wrong
+                    if (Math.abs(marker.lat) - 22 > 10 || Math.abs(marker.lng) - 114 > 10) {
+                        return false; //too far away, sth wrong
                     }
                     return true;
                 };
@@ -301,30 +338,29 @@ $scope.railWayGeoJSON.style=
                     var marker = {
                         lat: event.lat !== "" ? parseFloat(event.lat) : 0,
                         lng: event.lng !== "" ? parseFloat(event.lng) : 0,
-                        message:_getMessage(event),
+                        message: _getMessage(event),
                         focus: true,
-                        draggable: false
-                        ,
+                        draggable: false,
                         // fa-road,legal,gear
-                        icon:{
+                        icon: {
                             type: 'awesomeMarker',
                             icon: 'road',
-                            prefix :'fa',
-                            markerColor: event.isDelay? 'red':'darkblue'
+                            prefix: 'fa',
+                            markerColor: event.isDelay ? 'red' : 'darkblue'
                         }
                     };
                     //TODO use eng location name as key
-                    var eventKey= event.id.substring(event.id.lastIndexOf('/')+1);
-                    if(checkIfShowMarker(marker)){
+                    var eventKey = event.id.substring(event.id.lastIndexOf('/') + 1);
+                    if (checkIfShowMarker(marker)) {
                         $scope.markerBuckets[event.timeWindow][eventKey] = marker;
                     }
 
                 } else {
-                    if(event.contract && event.message !==''){
+                    if (event.contract && event.message !== '') {
                         event.sourceTag = $sce.trustAsHtml(_getSource(event));
-                    console.log('missed event');
-                    console.log(event);
-                        $scope.overallEventBuckets[event.timeWindow].push(event) ;
+                        console.log('missed event');
+                        console.log(event);
+                        $scope.overallEventBuckets[event.timeWindow].push(event);
                     }
                     //visualize in info bucket
                 }
@@ -337,13 +373,118 @@ $scope.railWayGeoJSON.style=
         });
 
         $scope.displayedMarkers = {};
+
+        $scope.expenseChartData={};
+        $scope.emergencyData = {  };
+            $scope.claimData = {    };
+            $scope.claimCountData = { };
+
+        $scope.expenseDataBuckets = {};
+
         $scope.$watch('chosenTimeWindow', function(newTimeWindow) {
             console.log('update displayed markers to ' + newTimeWindow);
             $scope.displayedMarkers = $scope.markerBuckets[newTimeWindow];
-            $scope.displayedOverall=$scope.overallEventBuckets[newTimeWindow];
+            $scope.displayedOverall = $scope.overallEventBuckets[newTimeWindow];
+            $scope.displayExpenseData = $scope.expenseDataBuckets[newTimeWindow];
+
+            $scope.expenseChartData = {
+                "title": "累計開支",
+                "subtitle": "(億)",
+                "ranges": [0, $scope.expenseDataBuckets[newTimeWindow-1].expenseTotal, $scope.displayExpenseData.awardedTotal],
+                "measures": [$scope.displayExpenseData.expenseTotal],
+                "markers": [$scope.displayExpenseData.expenseTotal]
+            };
+
+            $scope.emergencyData = {
+                "title": "應急餘額",
+                "subtitle": "(百萬)",
+                "ranges": [0, 891, 3194],
+                "measures": [220],
+                "markers": [180]
+            };
+            $scope.claimData = {
+                "title": "申索金額",
+                "subtitle": "(百萬)",
+                "ranges": [0, 891, 3194],
+                "measures": [220],
+                "markers": [180]
+            };
+            $scope.claimCountData = {
+                "title": "申索數目",
+                "subtitle": "",
+                "ranges": [0, 891, 3194],
+                "measures": [220],
+                "markers": [180]
+            };
+
+
 
             console.log($scope.displayedMarkers);
         });
+
+
+        var expensePromise = Q($http.get('https://spreadsheets.google.com/feeds/list/1qocahq0eRV-agNYccdofO2Sh35fx3ccKEYI5XniM7-s/203286289/public/values?alt=json')).then(function(data) {
+            return data.data.feed.entry;
+        });
+
+
+        expensePromise.then(function(entries) {
+            entries.splice(0, 12);
+            console.log(entries);
+
+            entries.map(function(entry) {
+                var timestamp = moment(entry.gsx$_cn6ca.$t, "YYYYMMDD").format('X');
+                var windowFound = $scope.determineTimeWindow(timestamp);
+                console.log(windowFound);
+
+
+                var HUNDRED_MILLION = 100000000;
+
+                $scope.expenseDataBuckets[windowFound.key] = {
+                    timeWindow: windowFound,
+                    awardedTotal: parseInt(entry.gsx$awardedtotal.$t)/ HUNDRED_MILLION,
+                    expenseTotal: parseInt(entry.gsx$aggexpensetotal.$t) / HUNDRED_MILLION
+                };
+
+            })
+
+            console.log($scope.expenseDataBuckets);
+        })
+
+
+
+        // 
+
+        var expenseDataTooltipKey = {
+            'Minimum': '累計開支',
+            'Current':'累計開支',
+            'Mean': '半年前',
+            'Maximum': '批出合約總值'
+        };
+
+        var emergencyDataTooltipKey = {
+            'Minimum': '',
+            'Mean': '半年前',
+            'Maximum': '批出合約總值'
+        };
+        var claimDataTooltipKey = {
+            'Minimum': '',
+            'Mean': '半年前',
+            'Maximum': '批出合約總值'
+        };
+
+        function _toolTipContentFunction(values) {
+            //TODO last time period give exact date
+            console.log(values);
+            return function(key, x, y, e, graph) {
+                return '<h6>' + values[x] + '</h6>' +
+                    '<p>' + y + '</p>'
+            }
+        }
+
+        $scope.emergencyDataTooltipContentFx = _toolTipContentFunction.bind(null, emergencyDataTooltipKey);
+        $scope.expenseDataTooltipContentFx = _toolTipContentFunction.bind(null, expenseDataTooltipKey);
+        $scope.claimDataTooltipContentFx = _toolTipContentFunction.bind(null, claimDataTooltipKey);
 
 
         $scope.layers = {
