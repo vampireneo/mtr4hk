@@ -119,7 +119,7 @@ position: 'top'
 },
 {
 element: '#title-container',
-intro: "高鐵延誤事件，你了解多少？",
+intro: "廣深港高速鐵路 花費超過六百億的高鐵工程是香港歷來最昂貴、最龐大的鐵路工程。<br />原定2015年完工，現在估計通車將延至2017年，市民更可能需要額外承擔延誤帶來的支出。到底超支多少、延誤責任誰屬，本網站搜羅各方資料拼成互動時序，以促進理性討論。<br />",
 position: 'top'
 },
 {
@@ -129,7 +129,7 @@ position: 'top'
 },
 {
 element: '.date-container',
-intro: "改變時間 - advance the time",
+intro: "顥示時間相關資料 - advance the time",
 position: 'top'
 },
 {
