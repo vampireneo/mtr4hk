@@ -320,8 +320,11 @@
                     <svg></svg>
               </nvd3-bullet-chart>
             </div>
-            <div ng-show="claimData.ranges[2]===0" class="col-xs-2 displayedTotal" >
+            <div ng-show="claimData.ranges[2]===0 && !displayClaimData.noInfo" class="col-xs-2 displayedTotal" >
             <h5>無申索</h5>
+            </div>
+            <div ng-show="displayClaimData.noInfo" class="col-xs-2 displayedTotal" >
+            <h5>無資料</h5>
             </div>
             <div ng-show="claimData.ranges[2]!==0" class="col-xs-2 displayedTotal" >
                <h4>{{displayClaimData.unresolvedClaimAmountTotal | number:2}}</h4>

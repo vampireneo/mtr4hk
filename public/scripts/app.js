@@ -519,9 +519,11 @@ angular.module('mtr4hk')
                 };
 
                 var unresolvedClaimAmountTotal = parseInt(entry.gsx$unresolvedclaimamounttotal.$t);
+                var noInfo = entry.gsx$unresolvedclaimamounttotal.$t === '#VALUE!';
                 var resolvingClaimRate = 0.5287;
                 $scope.claimDataBuckets[windowFound.key] = {
                     timeWindow: windowFound,
+                    noInfo: noInfo,
                     unresolvedClaimAmountTotal: unresolvedClaimAmountTotal ? unresolvedClaimAmountTotal / HUNDRED_MILLION : 0,
                     // unresolvedClaimBudget: parseInt(entry.gsx$awardedtotal.$t) / MILLION, 
                     expectedClaimSpending: unresolvedClaimAmountTotal ? (unresolvedClaimAmountTotal * resolvingClaimRate / HUNDRED_MILLION) : 0
