@@ -395,7 +395,7 @@ angular.module('mtr4hk')
                         lat: event.lat !== "" ? parseFloat(event.lat) : 0,
                         lng: event.lng !== "" ? parseFloat(event.lng) : 0,
                         message: _getMessage(event),
-                        focus: true,
+                        focus: false,
                         draggable: false,
                         // fa-road,legal,gear
                         icon: {
@@ -414,7 +414,6 @@ angular.module('mtr4hk')
                 } else {
                     if (event.contract && event.message !== '') {
                         event.sourceTag = $sce.trustAsHtml(_getSource(event));
-                        console.log('missed event');
                         console.log(event);
                         $scope.overallEventBuckets[event.timeWindow].push(event);
                     }
