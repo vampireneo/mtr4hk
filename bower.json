@@ -19,6 +19,7 @@
     "momentjs": "~2.6.0",
     "venturocket-angular-slider": "~0.3.2",
     "Leaflet.awesome-markers": "~2.0.2",
-    "angularjs-nvd3-directives": "~0.0.7"
+    "angularjs-nvd3-directives": "~0.0.7",
+    "angular-intro.js": "~1.0.3"
   }
 }

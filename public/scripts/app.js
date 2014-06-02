@@ -8,7 +8,8 @@ angular.module('mtr4hk', [
     'ui.bootstrap.tooltip',
     'leaflet-directive',
     'vr.directives.slider',
-    'nvd3ChartDirectives'
+    'nvd3ChartDirectives',
+    'angular-intro'
 ]).
 config(['$routeProvider',
     function($routeProvider) {
@@ -108,6 +109,55 @@ angular.module('mtr4hk')
 .controller('XRailProgressCtrl', ['$scope', '$timeout', '$http', '_', '$interpolate', '$sce',
     function($scope, $timeout, $http, _, $interpolate, $sce) {
         console.log('XRailProgressCtrl');
+
+        $scope.IntroOptions = {
+steps:[
+{
+element: '#title-container',
+intro: "高鐵延誤事件，你了解多少？",
+position: 'top'
+},
+{
+element: '#title-container',
+intro: "高鐵延誤事件，你了解多少？",
+position: 'top'
+},
+{
+element: '#slider-container',
+intro: "移動時間軸 - Slide to advance the time",
+position: 'top'
+},
+{
+element: '.date-container',
+intro: "改變時間 - advance the time",
+position: 'top'
+},
+{
+element: '.charts',
+intro: "圖表顯示當時工程進度及支出",
+position: 'left'
+},
+{
+element: '#map',
+intro: "地圖顥示當時各工程進度",
+position: 'bottom'
+},
+{
+element: '.general-info',
+intro: "顯示當時工程總進度",
+position: 'left'
+}]
+,
+ showStepNumbers: false,
+        exitOnOverlayClick: true,
+        showBullets:false,
+        exitOnEsc:true,
+        nextLabel: '<strong>NEXT!</strong>',
+        prevLabel: '<span style="color:green">Previous</span>',
+        skipLabel: 'Got it!',
+        doneLabel: 'Got it!'};
+
+
         // var app = angular.module("demoapp", ['leaflet-directive']);
         //      app.controller("DemoController", [ "$scope", function($scope) {
         //          // Nothing here!
@@ -387,10 +437,14 @@ angular.module('mtr4hk')
             $scope.displayedOverall = $scope.overallEventBuckets[newTimeWindow];
             $scope.displayExpenseData = $scope.expenseDataBuckets[newTimeWindow];
 
+            function getExpenseTotal(newTimeWindow) {
+                return $scope.expenseDataBuckets[newTimeWindow-1]? $scope.expenseDataBuckets[newTimeWindow-1].expenseTotal :0;
+            }
+
             $scope.expenseChartData = {
                 "title": "累計開支",
                 "subtitle": "(億)",
-                "ranges": [0, $scope.expenseDataBuckets[newTimeWindow-1].expenseTotal, $scope.displayExpenseData.awardedTotal],
+                "ranges": [0, getExpenseTotal(newTimeWindow), $scope.displayExpenseData.awardedTotal],
                 "measures": [$scope.displayExpenseData.expenseTotal],
                 "markers": [$scope.displayExpenseData.expenseTotal]
             };
@@ -503,6 +557,8 @@ angular.module('mtr4hk')
         }
         //lazy this module?
 
+
+        // $scope.startIntro();
 
 
     }
