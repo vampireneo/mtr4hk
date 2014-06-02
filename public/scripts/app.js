@@ -121,34 +121,37 @@ angular.module('mtr4hk')
         };
         $scope.IntroOptions = {
             steps: [{
-                element: '#title-container',
-                intro: "高鐵延誤事件，你了解多少？",
-                position: 'top'
-            }, {
-                element: '#title-container',
-                intro: "廣深港高速鐵路 花費超過六百億的高鐵工程是香港歷來最昂貴、最龐大的鐵路工程。<br />原定2015年完工，現在估計通車將延至2017年，市民更可能需要額外承擔延誤帶來的支出。到底超支多少、延誤責任誰屬，本網站搜羅各方資料拼成互動時序，以促進理性討論。<br />",
-                position: 'top'
-            }, {
-                element: '#slider-container',
-                intro: "移動時間軸",
-                position: 'top'
-            }, {
-                element: '.date-container',
-                intro: "顥示時間相關資料",
-                position: 'top'
-            }, {
-                element: '#map',
-                intro: "地圖顥示當時各工程進度",
-                position: 'bottom'
-            }, {
-                element: '.charts',
-                intro: "圖表顯示當時工程進度及支出",
-                position: 'left'
-            }, {
-                element: '.general-info',
-                intro: "顯示當時工程總進度",
-                position: 'left'
-            }],
+                    element: '#title-container',
+                    intro: "高鐵延誤事件，你了解多少？<br /><br /> 廣深港高速鐵路 花費超過六百億的高鐵工程是香港歷來最昂貴、最龐大的鐵路工程。<br />原定2015年完工，現在估計通車將延至2017年，市民更可能需要額外承擔延誤帶來的支出。到底超支多少、延誤責任誰屬，本網站旨在搜羅各方資料製成互動時序，以促進理性討論。<br />",
+                    position: 'top'
+                },
+                // {
+                //     element: '#title-container',
+                //     intro: "廣深港高速鐵路 花費超過六百億的高鐵工程是香港歷來最昂貴、最龐大的鐵路工程。<br />原定2015年完工，現在估計通車將延至2017年，市民更可能需要額外承擔延誤帶來的支出。到底超支多少、延誤責任誰屬，本網站搜羅各方資料拼成互動時序，以促進理性討論。<br />",
+                //     position: 'top'
+                // },
+                {
+                    element: '#slider-container',
+                    intro: "移動時間軸",
+                    position: 'top'
+                }, {
+                    element: '.date-container',
+                    intro: "顥示時間相關資料",
+                    position: 'top'
+                }, {
+                    element: '#map',
+                    intro: "地圖顥示當時各工程進度",
+                    position: 'bottom'
+                }, {
+                    element: '.charts',
+                    intro: "圖表顯示當時工程進度及支出<br />港鐵批出一定金額的合約予承建商，承建商會再就實際支出提出申索。<br />政府及港鐵會評估申索是否合理及發放金額，根據截至目前為止紀錄申索發放率為55.609% <br />                如合約批出的總額少於預算，剩餘的款額會退還作應急款項，反之亦然。當所批出之合約需要額外開支，例如須應付不可預見的情況、人為的障礙或設計改動，有關開支將會由應急款項中支付。",
+                    position: 'left'
+                }, {
+                    element: '.general-info',
+                    intro: "顯示當時工程總進度",
+                    position: 'left'
+                }
+            ],
             showStepNumbers: false,
             exitOnOverlayClick: true,
             showBullets: false,
@@ -156,7 +159,8 @@ angular.module('mtr4hk')
             nextLabel: '<strong>NEXT</strong>',
             prevLabel: '<span style="color:green">Previous</span>',
             skipLabel: 'OK',
-            doneLabel: 'OK'
+            doneLabel: 'OK',
+            overlayOpacity: 0.1
         };
 
 
@@ -432,12 +436,15 @@ angular.module('mtr4hk')
         $scope.claimCountData = {};
 
         $scope.expenseDataBuckets = {};
-                $scope.claimDataBuckets = {};
+        $scope.claimDataBuckets = {};
+        $scope.emergencyDataBuckets = {};
 
         function updateDisplayedStuff(newTimeWindow) {
             $scope.displayedMarkers = $scope.markerBuckets[newTimeWindow];
             $scope.displayedOverall = $scope.overallEventBuckets[newTimeWindow];
             $scope.displayExpenseData = $scope.expenseDataBuckets[newTimeWindow];
+            $scope.displayClaimData = $scope.claimDataBuckets[newTimeWindow];
+            $scope.displayEmergencyData = $scope.emergencyDataBuckets[newTimeWindow];
 
             if (!$scope.displayedMarkers || !$scope.displayedOverall || !$scope.displayExpenseData) {
                 return;
@@ -457,23 +464,23 @@ angular.module('mtr4hk')
 
             $scope.emergencyData = {
                 "title": "應急餘額",
-                "subtitle": "(百萬)",
-                "ranges": [0, 891, 3194],
-                "measures": [220],
-                "markers": [180]
+                "subtitle": "(億)",
+                "ranges": [0, $scope.displayEmergencyData.emergencyBalance, 54],
+                "measures": [$scope.displayEmergencyData.emergencyBalance],
+                "markers": [$scope.displayEmergencyData.emergencyBalance]
             };
-            console.log($scope.claimDataBuckets[newTimeWindow]);
+
             $scope.claimData = {
-                "title": "申索金額",
-                "subtitle": "(待解決,百萬)",
-                "ranges": [0, $scope.claimDataBuckets[newTimeWindow].expectedClaimSpending, $scope.claimDataBuckets[newTimeWindow].unresolvedClaimAmountTotal],
-                "measures": [$scope.claimDataBuckets[newTimeWindow].expectedClaimSpending],
-                "markers": [$scope.claimDataBuckets[newTimeWindow].expectedClaimSpending]
+                "title": "待解決申索",
+                "subtitle": "(億)",
+                "ranges": [0, $scope.displayClaimData.expectedClaimSpending, $scope.displayClaimData.unresolvedClaimAmountTotal],
+                "measures": [$scope.displayClaimData.expectedClaimSpending],
+                "markers": [$scope.displayClaimData.expectedClaimSpending]
             };
             $scope.claimCountData = {
                 "title": "申索數目",
                 "subtitle": "",
-                "ranges": [0, 891, 3194],
+                "ranges": [0, $scope.displayEmergencyData.emergencyBalance , 5400000000],
                 "measures": [220],
                 "markers": [180]
             };
@@ -512,15 +519,19 @@ angular.module('mtr4hk')
                     expenseTotal: parseInt(entry.gsx$aggexpensetotal.$t) / HUNDRED_MILLION
                 };
 
-                var unresolvedClaimAmountTotal  = parseInt(entry.gsx$unresolvedclaimamounttotal.$t) ;
+                var unresolvedClaimAmountTotal = parseInt(entry.gsx$unresolvedclaimamounttotal.$t);
                 var resolvingClaimRate = 0.5287;
                 $scope.claimDataBuckets[windowFound.key] = {
                     timeWindow: windowFound,
-                    unresolvedClaimAmountTotal: unresolvedClaimAmountTotal? unresolvedClaimAmountTotal / MILLION : 0 ,
+                    unresolvedClaimAmountTotal: unresolvedClaimAmountTotal ? unresolvedClaimAmountTotal / HUNDRED_MILLION : 0,
                     // unresolvedClaimBudget: parseInt(entry.gsx$awardedtotal.$t) / MILLION, 
-                    expectedClaimSpending: unresolvedClaimAmountTotal? (unresolvedClaimAmountTotal * resolvingClaimRate  / MILLION ):0
+                    expectedClaimSpending: unresolvedClaimAmountTotal ? (unresolvedClaimAmountTotal * resolvingClaimRate / HUNDRED_MILLION) : 0
                 };
-
+                var emergencyBalance  =  parseInt(entry.gsx$emergencybalance.$t);
+                $scope.emergencyDataBuckets[windowFound.key] = {
+                    timeWindow: windowFound,
+                    emergencyBalance: emergencyBalance ? emergencyBalance / HUNDRED_MILLION : 0,
+                };
 
             });
 
@@ -538,7 +549,7 @@ angular.module('mtr4hk')
         var expenseDataTooltipKey = {
             'Minimum': '累計開支',
             'Current': '累計開支',
-            'Previous':'累計開支', //marker actually
+            'Previous': '累計開支', //marker actually
             'Mean': '半年前',
             'Maximum': '批出合約總值'
         };
@@ -546,13 +557,15 @@ angular.module('mtr4hk')
         var emergencyDataTooltipKey = {
             'Minimum': '',
             'Mean': '半年前',
-            'Maximum': '批出合約總值'
+            'Current': '現餘金額',
+            'Previous': '現餘金額', //marker actually
+            'Maximum': '批出應急總值'
         };
         var claimDataTooltipKey = {
             'Minimum': '',
-            'Mean': '半年前',
-            'Current': '申索發放預算',
-            'Previous':'估計申索發放金額', //marker actually
+            'Mean': '估計申索發放金額',
+            'Current': '估計申索發放金額',
+            'Previous': '估計申索發放金額', //marker actually
             'Maximum': '待解決申索總值'
         };
 
@@ -561,7 +574,7 @@ angular.module('mtr4hk')
             console.log(values);
             return function(key, x, y, e, graph) {
                 return '<h6>' + values[x] + '</h6>' +
-                    '<p>' + y + '</p>'
+                    '<p>' + y.toFixed(2); + '</p>'
             }
         }
 
