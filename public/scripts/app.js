@@ -9,7 +9,8 @@ angular.module('mtr4hk', [
     'leaflet-directive',
     'vr.directives.slider',
     'nvd3ChartDirectives',
-    'angular-intro'
+    'angular-intro',
+    'cgBusy'
 ]).
 config(['$routeProvider',
     function($routeProvider) {
@@ -110,52 +111,53 @@ angular.module('mtr4hk')
     function($scope, $timeout, $http, _, $interpolate, $sce) {
         console.log('XRailProgressCtrl');
 
+        //perhaps show only when intro.js done
+        $scope.loadingConfig = {
+            message: 'Loading...',
+            backdrop: false,
+            promise: null,
+            delay: 300,
+            minDuration: 700
+        };
         $scope.IntroOptions = {
-steps:[
-{
-element: '#title-container',
-intro: "高鐵延誤事件，你了解多少？",
-position: 'top'
-},
-{
-element: '#title-container',
-intro: "廣深港高速鐵路 花費超過六百億的高鐵工程是香港歷來最昂貴、最龐大的鐵路工程。<br />原定2015年完工，現在估計通車將延至2017年，市民更可能需要額外承擔延誤帶來的支出。到底超支多少、延誤責任誰屬，本網站搜羅各方資料拼成互動時序，以促進理性討論。<br />",
-position: 'top'
-},
-{
-element: '#slider-container',
-intro: "移動時間軸 - Slide to advance the time",
-position: 'top'
-},
-{
-element: '.date-container',
-intro: "顥示時間相關資料 - advance the time",
-position: 'top'
-},
-{
-element: '.charts',
-intro: "圖表顯示當時工程進度及支出",
-position: 'left'
-},
-{
-element: '#map',
-intro: "地圖顥示當時各工程進度",
-position: 'bottom'
-},
-{
-element: '.general-info',
-intro: "顯示當時工程總進度",
-position: 'left'
-}]
-,
- showStepNumbers: false,
-        exitOnOverlayClick: true,
-        showBullets:false,
-        exitOnEsc:true,
-        nextLabel: '<strong>NEXT</strong>',
-        prevLabel: '<span style="color:green">Previous</span>',
-        skipLabel: 'OK',
-        doneLabel: 'OK'};
+            steps: [{
+                element: '#title-container',
+                intro: "高鐵延誤事件，你了解多少？",
+                position: 'top'
+            }, {
+                element: '#title-container',
+                intro: "廣深港高速鐵路 花費超過六百億的高鐵工程是香港歷來最昂貴、最龐大的鐵路工程。<br />原定2015年完工，現在估計通車將延至2017年，市民更可能需要額外承擔延誤帶來的支出。到底超支多少、延誤責任誰屬，本網站搜羅各方資料拼成互動時序，以促進理性討論。<br />",
+                position: 'top'
+            }, {
+                element: '#slider-container',
+                intro: "移動時間軸",
+                position: 'top'
+            }, {
+                element: '.date-container',
+                intro: "顥示時間相關資料",
+                position: 'top'
+            }, {
+                element: '#map',
+                intro: "地圖顥示當時各工程進度",
+                position: 'bottom'
+            }, {
+                element: '.charts',
+                intro: "圖表顯示當時工程進度及支出",
+                position: 'left'
+            }, {
+                element: '.general-info',
+                intro: "顯示當時工程總進度",
+                position: 'left'
+            }],
+            showStepNumbers: false,
+            exitOnOverlayClick: true,
+            showBullets: false,
+            exitOnEsc: true,
+            nextLabel: '<strong>NEXT</strong>',
+            prevLabel: '<span style="color:green">Previous</span>',
+            skipLabel: 'OK',
+            doneLabel: 'OK'
+        };
 
 
         // var app = angular.module("demoapp", ['leaflet-directive']);
@@ -315,7 +317,7 @@ position: 'left'
                 }
             })
             console.log(events);
-
+            updateDisplayedStuff($scope.chosenTimeWindow);
             $scope.events = events;
             return events;
         }).fail(function(err) {
@@ -424,21 +426,25 @@ position: 'left'
 
         $scope.displayedMarkers = {};
 
-        $scope.expenseChartData={};
-        $scope.emergencyData = {  };
-            $scope.claimData = {    };
-            $scope.claimCountData = { };
+        $scope.expenseChartData = {};
+        $scope.emergencyData = {};
+        $scope.claimData = {};
+        $scope.claimCountData = {};
 
         $scope.expenseDataBuckets = {};
+                $scope.claimDataBuckets = {};
 
-        $scope.$watch('chosenTimeWindow', function(newTimeWindow) {
-            console.log('update displayed markers to ' + newTimeWindow);
+        function updateDisplayedStuff(newTimeWindow) {
             $scope.displayedMarkers = $scope.markerBuckets[newTimeWindow];
             $scope.displayedOverall = $scope.overallEventBuckets[newTimeWindow];
             $scope.displayExpenseData = $scope.expenseDataBuckets[newTimeWindow];
 
+            if (!$scope.displayedMarkers || !$scope.displayedOverall || !$scope.displayExpenseData) {
+                return;
+            }
+
             function getExpenseTotal(newTimeWindow) {
-                return $scope.expenseDataBuckets[newTimeWindow-1]? $scope.expenseDataBuckets[newTimeWindow-1].expenseTotal :0;
+                return $scope.expenseDataBuckets[newTimeWindow - 1] ? $scope.expenseDataBuckets[newTimeWindow - 1].expenseTotal : 0;
             }
 
             $scope.expenseChartData = {
@@ -458,10 +464,10 @@ position: 'left'
             };
             $scope.claimData = {
                 "title": "申索金額",
-                "subtitle": "(百萬)",
+                "subtitle": "(待解決,百萬)",
                 "ranges": [0, 891, 3194],
-                "measures": [220],
-                "markers": [180]
+                "measures": [0],
+                "markers": [$scope.claimDataBuckets[newTimeWindow].unresolvedClaimBudget]
             };
             $scope.claimCountData = {
                 "title": "申索數目",
@@ -470,16 +476,21 @@ position: 'left'
                 "measures": [220],
                 "markers": [180]
             };
+        }
 
 
-
+        $scope.$watch('chosenTimeWindow', function(newTimeWindow) {
+            console.log('update displayed markers to ' + newTimeWindow);
             console.log($scope.displayedMarkers);
+            updateDisplayedStuff(newTimeWindow);
         });
 
 
         var expensePromise = Q($http.get('https://spreadsheets.google.com/feeds/list/1qocahq0eRV-agNYccdofO2Sh35fx3ccKEYI5XniM7-s/203286289/public/values?alt=json')).then(function(data) {
             return data.data.feed.entry;
         });
+
+        $scope.loadingConfig.promise = expensePromise;
 
 
         expensePromise.then(function(entries) {
@@ -491,16 +502,30 @@ position: 'left'
                 var windowFound = $scope.determineTimeWindow(timestamp);
                 console.log(windowFound);
 
-
                 var HUNDRED_MILLION = 100000000;
+                var MILLION = 1000000;
 
                 $scope.expenseDataBuckets[windowFound.key] = {
                     timeWindow: windowFound,
-                    awardedTotal: parseInt(entry.gsx$awardedtotal.$t)/ HUNDRED_MILLION,
+                    awardedTotal: parseInt(entry.gsx$awardedtotal.$t) / HUNDRED_MILLION,
                     expenseTotal: parseInt(entry.gsx$aggexpensetotal.$t) / HUNDRED_MILLION
                 };
 
-            })
+                var unresolvedClaimAmountTotal  = parseInt(entry.gsx$unresolvedclaimamounttotal.$t) ;
+                var resolvingClaimRate = 0.5287;
+                $scope.claimDataBuckets[windowFound.key] = {
+                    timeWindow: windowFound,
+                    unresolvedClaimAmountTotal: unresolvedClaimAmountTotal / MILLION,
+                    unresolvedClaimBudget: parseInt(entry.gsx$awardedtotal.$t) / MILLION,
+                    expectedClaimSpending: (resolvingClaimRate * unresolvedClaimAmountTotal) / MILLION
+                };
+
+
+            });
+
+
+
+            updateDisplayedStuff($scope.chosenTimeWindow);
 
             console.log($scope.expenseDataBuckets);
         })
@@ -511,7 +536,8 @@ position: 'left'
 
         var expenseDataTooltipKey = {
             'Minimum': '累計開支',
-            'Current':'累計開支',
+            'Current': '累計開支',
+            'Previous':'累計開支', //marker actually
             'Mean': '半年前',
             'Maximum': '批出合約總值'
         };
@@ -524,7 +550,9 @@ position: 'left'
         var claimDataTooltipKey = {
             'Minimum': '',
             'Mean': '半年前',
-            'Maximum': '批出合約總值'
+            'Current': '申索發放預算',
+            'Previous':'估計申索發放金額', //marker actually
+            'Maximum': '待解決申索總值'
         };
 
         function _toolTipContentFunction(values) {

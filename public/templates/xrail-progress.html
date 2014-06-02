@@ -247,13 +247,17 @@
   .nvtooltip.xy-tooltip{
     margin-left:-10rem;
   }
+
+  .displayedTotal h4{
+    margin-top:0.4rem;
+  }
   </style>
 
 
 
 <link rel="stylesheet" type="text/css" href="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
   <!-- controls="controls" -->
-<div class="xrail-container" ng-intro-options="IntroOptions" ng-intro-method="startIntro" ng-intro-autostart="true">
+<div cg-busy="loadingConfig"  class="xrail-container" ng-intro-options="IntroOptions" ng-intro-method="startIntro" ng-intro-autostart="true">
   
   <div class="map-container">
     <!--  -->
@@ -276,14 +280,14 @@
   <div class="col-xs-5 col-md-4 charts">
             <h5><b>工程進度及支出表</b></h5>
 
-          <div>
-
+          <div class="row">
+          <div class="col-xs-10">
             
           <nvd3-bullet-chart
                 data="expenseChartData"
                   id="expenseChartData"
                   margin="{left:75,top:5,bottom:35,right:10}"
-                  width="450"
+                  width="400"
                   height="60"
                   interactive="true"
                   tooltips="true"
@@ -292,19 +296,11 @@
                     <svg></svg>
               </nvd3-bullet-chart>
           </div>
-          <div>
-            <nvd3-bullet-chart
-                  data="emergencyData"
-                    id="emergencyData"
-                    margin="{left:75,top:5,bottom:35,right:10}"
-                    width="450"
-                    height="60"
-                    interactive="true"
-                           tooltips="true"
-                    tooltipcontent="emergencyDataTooltipContentFx()"
-                    >
-                      <svg></svg>
-                </nvd3-bullet-chart>
+          <div class="col-xs-2 displayedTotal" >
+<h4>
+              {{displayExpenseData.expenseTotal}}
+</h4>
+          </div>
           </div>
           <div>
           <nvd3-bullet-chart
@@ -319,7 +315,21 @@
                   >
                     <svg></svg>
               </nvd3-bullet-chart>
-              已解決申索發放率:50%
+              <!-- 已解決申索發放率:50% -->
+          </div>
+          <div>
+            <nvd3-bullet-chart
+                  data="emergencyData"
+                    id="emergencyData"
+                    margin="{left:75,top:5,bottom:35,right:10}"
+                    width="450"
+                    height="60"
+                    interactive="true"
+                           tooltips="true"
+                    tooltipcontent="emergencyDataTooltipContentFx()"
+                    >
+                      <svg></svg>
+                </nvd3-bullet-chart>
           </div>
   </div>
     <div class="col-xs-5 col-md-4 title" id="title-container">
