@@ -462,12 +462,13 @@ angular.module('mtr4hk')
                 "measures": [220],
                 "markers": [180]
             };
+            console.log($scope.claimDataBuckets[newTimeWindow]);
             $scope.claimData = {
                 "title": "申索金額",
                 "subtitle": "(待解決,百萬)",
-                "ranges": [0, 891, 3194],
-                "measures": [0],
-                "markers": [$scope.claimDataBuckets[newTimeWindow].unresolvedClaimBudget]
+                "ranges": [0, $scope.claimDataBuckets[newTimeWindow].expectedClaimSpending, $scope.claimDataBuckets[newTimeWindow].unresolvedClaimAmountTotal],
+                "measures": [$scope.claimDataBuckets[newTimeWindow].expectedClaimSpending],
+                "markers": [$scope.claimDataBuckets[newTimeWindow].expectedClaimSpending]
             };
             $scope.claimCountData = {
                 "title": "申索數目",
@@ -515,9 +516,9 @@ angular.module('mtr4hk')
                 var resolvingClaimRate = 0.5287;
                 $scope.claimDataBuckets[windowFound.key] = {
                     timeWindow: windowFound,
-                    unresolvedClaimAmountTotal: unresolvedClaimAmountTotal / MILLION,
-                    unresolvedClaimBudget: parseInt(entry.gsx$awardedtotal.$t) / MILLION,
-                    expectedClaimSpending: (resolvingClaimRate * unresolvedClaimAmountTotal) / MILLION
+                    unresolvedClaimAmountTotal: unresolvedClaimAmountTotal? unresolvedClaimAmountTotal / MILLION : 0 ,
+                    // unresolvedClaimBudget: parseInt(entry.gsx$awardedtotal.$t) / MILLION, 
+                    expectedClaimSpending: unresolvedClaimAmountTotal? (unresolvedClaimAmountTotal * resolvingClaimRate  / MILLION ):0
                 };
 
 
