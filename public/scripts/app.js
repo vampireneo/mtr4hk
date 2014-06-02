@@ -152,10 +152,10 @@ position: 'left'
         exitOnOverlayClick: true,
         showBullets:false,
         exitOnEsc:true,
-        nextLabel: '<strong>NEXT!</strong>',
+        nextLabel: '<strong>NEXT</strong>',
         prevLabel: '<span style="color:green">Previous</span>',
-        skipLabel: 'Got it!',
-        doneLabel: 'Got it!'};
+        skipLabel: 'OK',
+        doneLabel: 'OK'};
 
 
         // var app = angular.module("demoapp", ['leaflet-directive']);
