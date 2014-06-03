@@ -111,6 +111,8 @@ angular.module('mtr4hk')
     function($scope, $timeout, $http, _, $interpolate, $sce) {
         console.log('XRailProgressCtrl');
 
+
+        $scope.railWayGeoJSON = {};
         //perhaps show only when intro.js done
         $scope.loadingConfig = {
             message: 'Loading...',
@@ -243,7 +245,6 @@ angular.module('mtr4hk')
             return windowFound;
         }
 
-        $scope.railWayGeoJSON = {};
 
         $scope.railWayGeoJSON.style = {
             // fillColor: getColor($scope.countries[feature.id]),
@@ -275,7 +276,7 @@ angular.module('mtr4hk')
                         "description": "",
                         "id": "marker-hvkxhh3h3",
                         "stroke": "#f86767",
-                        "stroke-opacity": 1,
+                        "stroke-opacity": 0.5,
                         "stroke-width": 8,
                         "title": "Railway"
                     },
@@ -286,7 +287,6 @@ angular.module('mtr4hk')
             "id": "vincentlaucy.ib05kcn9",
             "type": "FeatureCollection"
         };
-
         promise.then(function(entries) {
             console.log(entries);
             var events = entries.map(function(entry) {
@@ -444,6 +444,8 @@ angular.module('mtr4hk')
             $scope.displayExpenseData = $scope.expenseDataBuckets[newTimeWindow];
             $scope.displayClaimData = $scope.claimDataBuckets[newTimeWindow];
             $scope.displayEmergencyData = $scope.emergencyDataBuckets[newTimeWindow];
+
+            $scope.geojson = $scope.railWayGeoJSON;
 
             if (!$scope.displayedMarkers || !$scope.displayedOverall || !$scope.displayExpenseData) {
                 return;
