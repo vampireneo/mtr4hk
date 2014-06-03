@@ -124,7 +124,7 @@ angular.module('mtr4hk')
         $scope.IntroOptions = {
             steps: [{
                     element: '#title-container',
-                    intro: "高鐵延誤事件，你了解多少？<br /><br /> 廣深港高速鐵路 花費超過六百億的高鐵工程是香港歷來最昂貴、最龐大的鐵路工程。<br />原定2015年完工，現在估計通車將延至2017年，市民更可能需要額外承擔延誤帶來的支出。到底超支多少、延誤責任誰屬，本網站旨在搜羅各方資料製成互動時序，以促進理性討論。<br />",
+                    intro: "高鐵延誤事件，你了解多少？<br /><br /> 廣深港高速鐵路 花費超過六百億的高鐵工程是香港歷來最昂貴、最龐大的鐵路工程。<br />原定2015年完工，現在估計通車將延至2017年，市民更可能需要額外承擔延誤帶來的支出。到底超支多少、延誤責任誰屬，本網站旨在搜羅各方資料製成互動時序，以促進理性討論。<br /> 註：建議使用桌面電腦瀏覽",
                     position: 'top'
                 },
                 // {
@@ -388,7 +388,7 @@ angular.module('mtr4hk')
                     return true;
                 };
 
-                if (event.location !== '#N/A' && event.location !== '' && event.message !== '') {
+                if (event.location !== '#N/A' && event.location !== '-' && event.location !== '' && event.message !== '') {
 
 
                     var marker = {
