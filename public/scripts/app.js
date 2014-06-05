@@ -394,6 +394,8 @@ angular.module('mtr4hk')
                     var marker = {
                         lat: event.lat !== "" ? parseFloat(event.lat) : 0,
                         lng: event.lng !== "" ? parseFloat(event.lng) : 0,
+                        // layer: event.contract,
+                        group:event.contract,
                         message: _getMessage(event),
                         focus: false,
                         draggable: false,
@@ -481,7 +483,7 @@ angular.module('mtr4hk')
             $scope.claimCountData = {
                 "title": "申索數目",
                 "subtitle": "",
-                "ranges": [0, $scope.displayEmergencyData.emergencyBalance , 5400000000],
+                "ranges": [0, $scope.displayEmergencyData.emergencyBalance, 5400000000],
                 "measures": [220],
                 "markers": [180]
             };
@@ -530,7 +532,7 @@ angular.module('mtr4hk')
                     // unresolvedClaimBudget: parseInt(entry.gsx$awardedtotal.$t) / MILLION, 
                     expectedClaimSpending: unresolvedClaimAmountTotal ? (unresolvedClaimAmountTotal * resolvingClaimRate / HUNDRED_MILLION) : 0
                 };
-                var emergencyBalance  =  parseInt(entry.gsx$emergencybalance.$t);
+                var emergencyBalance = parseInt(entry.gsx$emergencybalance.$t);
                 $scope.emergencyDataBuckets[windowFound.key] = {
                     timeWindow: windowFound,
                     emergencyBalance: emergencyBalance ? emergencyBalance / HUNDRED_MILLION : 0,
@@ -598,8 +600,36 @@ angular.module('mtr4hk')
                         continuousWorld: true
                     }
                 }
+            },
+            overlays: {
+
             }
-        }
+        };
+
+        function _createOverlay(contractName) {
+            return {
+                "name": contractName,
+                "type": "markercluster",
+                "visible": true,
+                "layerParams": {},
+                "layerOptions": {
+                    zoomToBoundsOnClick:true
+                    // singleMarkerMode:true
+                }
+            };
+        };
+
+        // className: 'marker-cluster' + c,
+
+        // { spiderfyOnMaxZoom: false, showCoverageOnHover: false, zoomToBoundsOnClick: false }
+
+var allContracts=['802','803A','803B','803C','803D','805','810A','810B','811A','811B','815A','815B','815C','816A','816C','816D','820','821','822','823A','823B','824','825','826','830','840','841A','841B','843','846','847','848','850','852','853','855','856','861A','Overall'];
+
+_.each(allContracts,function(contractName) {
+        $scope.layers.overlays[contractName] = _createOverlay(contractName);
+})
+console.log($scope.layers.overlays);
+
         //lazy this module?
 
 
