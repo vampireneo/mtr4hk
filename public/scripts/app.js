@@ -172,9 +172,9 @@ angular.module('mtr4hk')
         //      }]);
 
         $scope.westKowloon = {
-            lat: 22.3534757,
-            lng: 114.25028460,
-            zoom: 12
+            lat: 22.43451358088213,
+            lng: 114.30107116699219,
+            zoom: 11
         };
 
         var promise = Q($http.get('https://spreadsheets.google.com/feeds/list/1qocahq0eRV-agNYccdofO2Sh35fx3ccKEYI5XniM7-s/0/public/values?alt=json')).then(function(data) {
@@ -512,6 +512,7 @@ angular.module('mtr4hk')
                 var timestamp = moment(entry.gsx$_cn6ca.$t, "YYYYMMDD").format('X');
                 var windowFound = $scope.determineTimeWindow(timestamp);
                 console.log(windowFound);
+
 
                 var HUNDRED_MILLION = 100000000;
                 var MILLION = 1000000;
