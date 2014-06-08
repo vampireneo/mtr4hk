@@ -177,7 +177,7 @@ angular.module('mtr4hk')
             zoom: 11
         };
 
-        var promise = Q($http.get('https://spreadsheets.google.com/feeds/list/1qocahq0eRV-agNYccdofO2Sh35fx3ccKEYI5XniM7-s/0/public/values?alt=json')).then(function(data) {
+        var promise = Q($http.get('https://spreadsheets.google.com/feeds/list/1qocahq0eRV-agNYccdofO2Sh35fx3ccKEYI5XniM7-s/1/public/values?alt=json')).then(function(data) {
             return data.data.feed.entry;
         });
 
